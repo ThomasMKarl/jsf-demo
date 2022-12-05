@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ImposeSheets height="1000.0" width="2000.0">
+  <Sheet>
+    <stroke cmyk="1.0 1.0 1.0 1.0" colorant="All" overprint="false" tint="1.0" with="0.0">
+      <circle points="0.0 0.0 0.0"/>
+    </stroke>
+    <stroke cmyk="1.0 1.0 1.0 1.0" colorant="All" overprint="false" tint="1.0" with="0.0">
+      <line points="0.0 0.0 0.0 0.0"/>
+    </stroke>
+    <fill cmyk="1.0 1.0 1.0 1.0" colorant="All" overprint="false" tint="1.0">
+      <rect points="0.0 0.0 0.0 0.0"/>
+    </fill>
+    <container knockout="0.0" layout="flow" matrix="1.0 0.0 0.0 1.0 0.0 0.0"/>
+  </Sheet>
+  <Sheet height="100.0" width="2300.0">
+    <mark clip="0 0 100.0 200.0" file="D:\jsf-demo\src\main\resources\someMark.pdf" knockout="3.0" matrix="1.0 0.0 0.0 1.0 0.0 0.0"/>
+  </Sheet>
+</ImposeSheets>

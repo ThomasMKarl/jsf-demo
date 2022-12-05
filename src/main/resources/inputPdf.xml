@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PDFInfo FileName="inputPdf.xml" FileFormat="PDF" PDFVersion="1.3" PageCount="3" PreSeparated="false">
+<PageInfo PageIndex="0">
+    <PageSize>
+        <Width>1000</Width>
+        <Height>1500</Height>
+    </PageSize>
+    <MediaBox>
+        <X0>100</X0>
+        <Y0>200</Y0>
+        <X1>150</X1>
+        <Y1>400</Y1>
+    </MediaBox>
+    <TrimBox>
+        <X0>100</X0>
+        <Y0>200</Y0>
+        <X1>150</X1>
+        <Y1>400</Y1>
+    </TrimBox>
+    <BleedBox>
+        <X0>100</X0>
+        <Y0>200</Y0>
+        <X1>150</X1>
+        <Y1>400</Y1>
+    </BleedBox>
+    <ArtBox>
+        <X0>100</X0>
+        <Y0>200</Y0>
+        <X1>150</X1>
+        <Y1>400</Y1>
+    </ArtBox>
+    <ColorInfo Cyan="true" Magenta="false" Yellow="true" Black="true">
+        <CustomColor Name="HKS42">
+            <Cyan>1.0</Cyan>
+            <Magenta>1.0</Magenta>
+            <Yellow>0.0</Yellow>
+            <Black>0.3</Black>
+        </CustomColor>
+        <CustomColor Name="HKS13">
+            <Cyan>0.2</Cyan>
+            <Magenta>1.0</Magenta>
+            <Yellow>0</Yellow>
+            <Black>0.5</Black>
+        </CustomColor>
+    </ColorInfo>
+</PageInfo>
+<PageInfo PageIndex="1">
+    <PageSize>
+        <Width>1000</Width>
+        <Height>1500</Height>
+    </PageSize>
+    <TrimBox>
+        <X0>100</X0>
+        <Y0>200</Y0>
+        <X1>150</X1>
+        <Y1>400</Y1>
+    </TrimBox>
+    <ColorInfo Cyan="true" Magenta="false" Yellow="true" Black="true">
+        <CustomColor Name="HKS42">
+            <Cyan>1.0</Cyan>
+            <Magenta>1.0</Magenta>
+            <Yellow>0.0</Yellow>
+            <Black>0.3</Black>
+        </CustomColor>
+    </ColorInfo>
+</PageInfo>
+<PageInfo PageIndex="2" Rotation="90">
+    <PageSize>
+        <Width>1000</Width>
+        <Height>1500</Height>
+    </PageSize>
+    <MediaBox>
+        <X0>100</X0>
+        <Y0>200</Y0>
+        <X1>150</X1>
+        <Y1>400</Y1>
+    </MediaBox>
+    <ColorInfo Cyan="true" Magenta="false" Yellow="true" Black="true"></ColorInfo>
+</PageInfo>
+</PDFInfo>

@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:p="http://primefaces.org/ui"
+     xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+   <title>#{Canvas.pathToPdf()}</title>
+</h:head>
+
+<h:body>
+
+   <p:outputPanel layout="block" id="container" deferred="true">
+      <p:panelGrid columns="2">
+          <h:outputLabel value="Page"/>
+          <p:spinner min="1" max="#{Canvas.maxPageNum()}" value="#{Canvas.page()}">
+              <p:ajax update="container"/>
+          </p:spinner>
+      </p:panelGrid>
+      <pe:documentViewer
+              height="500"
+              page="#{Canvas.page()}"
+              url="#{Canvas.pathToPdf()}"/>
+  </p:outputPanel>
+
+</h:body>
+</html>
