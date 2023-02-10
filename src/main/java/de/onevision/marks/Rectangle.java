@@ -1,15 +1,19 @@
 package de.onevision.marks;
 
+import java.util.Optional;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import de.onevision.math.Point;
 import de.onevision.math.TransMat;
-import de.onevision.color.ColorSetting;
+import de.onevision.color.SpotColor;
+import de.onevision.config.Size;
 
 public final class Rectangle implements Mark {
-    public Point size = new Point();
-    public ColorSetting colorSetting = new ColorSetting();
+    public Size size = new Size();
+    public SpotColor spotColor = new SpotColor();
+    public Optional<Double> knockoutThickness = Optional.empty();
     private TransMat TM = TransMat.identity();
 
     @Override
@@ -20,11 +24,11 @@ public final class Rectangle implements Mark {
     @Override
     public Element generateXml(Document doc, Element elem) {
         Element fillElem = (Element)elem.appendChild(doc.createElement("fill"));
-        colorSetting.appendAttributes(fillElem);
+        spotColor.appendAttributes(fillElem);
 
         Point first = new Point();
         first = first.mult(TM);
-        Point second = new Point(size.x(), size.y());
+        Point second = new Point(size.width, size.height);
         second = second.mult(TM);
         Element rectElem = (Element)fillElem.appendChild(doc.createElement("rect"));
         rectElem.setAttribute("points", Double.toString(first.x()) + " " + Double.toString(first.y()) + " " + Double.toString(second.x()) + " " + Double.toString(second.y()));

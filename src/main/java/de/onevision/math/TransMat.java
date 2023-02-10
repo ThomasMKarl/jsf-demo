@@ -1,5 +1,7 @@
 package de.onevision.math;
 
+import de.onevision.Platform.Exceptions.Error;
+
 import org.w3c.dom.Element;
 
 public class TransMat {
@@ -17,6 +19,23 @@ public class TransMat {
         TM.elements[i22] = 1;
         TM.elements[i23] = 0;
 
+        return TM;
+    }
+
+    public static TransMat fromString(String values) throws Error {
+        String[] split = values.split(" ");
+        if (split.length != 6) {
+            throw new Error("internal error", "", "cannot create matrix from string");
+        }
+
+        TransMat TM = new TransMat();
+        TM.elements[i11] = Double.parseDouble(split[0]);
+        TM.elements[i12] = Double.parseDouble(split[2]);
+        TM.elements[i13] = Double.parseDouble(split[4]);
+
+        TM.elements[i21] = Double.parseDouble(split[1]);
+        TM.elements[i22] = Double.parseDouble(split[3]);
+        TM.elements[i23] = Double.parseDouble(split[5]);
         return TM;
     }
 

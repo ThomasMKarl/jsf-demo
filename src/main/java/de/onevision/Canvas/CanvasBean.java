@@ -3,8 +3,7 @@ package de.onevision.Canvas;
 import de.onevision.PdfParser.PdfInfo;
 import de.onevision.PdfParser.PdfParser;
 import de.onevision.Platform.Locations;
-import de.onevision.Platform.Exceptions.NotImpl;
-import de.onevision.Platform.Exceptions.Error;
+import de.onevision.Platform.Exceptions.Base;
 
 import java.io.Serializable;
 import java.nio.file.Path;
@@ -21,9 +20,11 @@ public class CanvasBean implements Serializable {
             PdfParser pdfParser = PdfParser.parse(pathToInputXml);
             pdfInfo = PdfInfo.init();
             pdfInfo.append(pdfParser.root());
-        } catch (Error e) {
-        } catch (NotImpl e) {
+        } catch (Base e) {
+            e.handle();
         }
+
+        System.out.println("REACHED!");
 
         this.maxPageNum = pdfInfo.overallPageCount();
         this.pathToPdf = Locations.resources().resolve("inputPdf.pdf");

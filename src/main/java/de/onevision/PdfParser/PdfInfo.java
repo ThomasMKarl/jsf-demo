@@ -187,8 +187,8 @@ public class PdfInfo {
         black = (Double)XmlUtil.parseElem(elem, "Black", black);
 
         SpotColor spotColor = new SpotColor();
-        spotColor.repr = new CMYK(cyan, magenta, yellow, black);
-        spotColor.colorant = colorant;
+        spotColor.color = new CMYK(cyan, magenta, yellow, black);
+        spotColor.name = colorant;
         return spotColor;
     }
 

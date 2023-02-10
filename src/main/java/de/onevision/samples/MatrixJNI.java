@@ -7,11 +7,11 @@ public class MatrixJNI {
     }
     
     public static void main(String[] args) {
-        MatrixJNI help = new MatrixJNI();
-	help.sayHello();
+		MatrixJNI help = new MatrixJNI();
+		help.sayHello();
 
-	String[] toCat = {"bli", "bla", "blub"};
-	System.out.println(help.cat(toCat, " "));
+		String[] toCat = {"bli", "bla", "blub"};
+		System.out.println(help.cat(toCat, " "));
     }
 
     private native String cat(String[] toCat, String delim);

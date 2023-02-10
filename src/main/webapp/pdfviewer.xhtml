@@ -11,11 +11,11 @@
 
 <h:body>
 
-   <p:outputPanel layout="block" id="container" deferred="true">
+   <p:outputPanel layout="block" id="pagepanel" deferred="true">
       <p:panelGrid columns="2">
           <h:outputLabel value="Page"/>
           <p:spinner min="1" max="#{Canvas.maxPageNum()}" value="#{Canvas.page()}">
-              <p:ajax update="container"/>
+              <p:ajax process="@this" update="page:pagepanel"/>
           </p:spinner>
       </p:panelGrid>
       <pe:documentViewer

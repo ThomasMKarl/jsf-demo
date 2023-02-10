@@ -38,6 +38,8 @@ public class Platform {
     static public final String userHome = System.getProperty("user.home");
     static public final String userName = System.getProperty("user.name");
 
+    static public final String systemTempDir = System.getProperty("java.io.tmpdir");
+
     static public final boolean inWorkspace = System.getenv("OV_STORAGE_BASEPATH") != null;
     static public final boolean isWindows = osName.contains("Windows");
     static public final boolean isLinux = !isWindows;

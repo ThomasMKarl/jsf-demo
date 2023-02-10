@@ -1,9 +1,10 @@
-package de.onevision.marks;
+package de.onevision.marks.out;
 
 import java.util.ArrayList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import de.onevision.marks.Mark;
 import de.onevision.math.TransMat;
 
 public final class Group implements Mark {

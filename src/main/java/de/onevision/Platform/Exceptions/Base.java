@@ -27,7 +27,7 @@ public abstract class Base extends Exception {
             logger.info(formatString);
         if (!debugMessage.isEmpty())
             logger.debug(debugMessage);
-        logger.debug(this.getStackTrace());
+        this.printStackTrace();
     }
 
     private String removeLB(String in) {

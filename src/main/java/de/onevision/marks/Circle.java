@@ -1,7 +1,9 @@
 package de.onevision.marks;
 
 import de.onevision.math.TransMat;
-import de.onevision.color.ColorSetting;
+import de.onevision.color.SpotColor;
+
+import java.util.Optional;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -9,7 +11,8 @@ import org.w3c.dom.Element;
 public final class Circle implements Mark {
     public double thickness = 0;
     public double radius = 0;
-    public ColorSetting colorSetting = new ColorSetting();
+    public SpotColor spotColor = new SpotColor();
+    public Optional<Double> knockoutThickness = Optional.empty();
     private TransMat TM = TransMat.identity();
 
     @Override
@@ -20,7 +23,7 @@ public final class Circle implements Mark {
     @Override
     public Element generateXml(Document doc, Element elem) {
         Element strokeElem = (Element) elem.appendChild(doc.createElement("stroke"));
-        strokeElem = colorSetting.appendAttributes(strokeElem);
+        strokeElem = spotColor.appendAttributes(strokeElem);
         strokeElem.setAttribute("with", Double.toString(thickness));
 
         Element circleElement = (Element) strokeElem.appendChild(doc.createElement("circle"));

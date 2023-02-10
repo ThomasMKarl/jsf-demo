@@ -2,30 +2,56 @@ package de.onevision.marks;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Optional;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import de.onevision.Platform.Locations;
 import de.onevision.color.ReplaceColor;
 import de.onevision.color.SpotColor;
+import de.onevision.config.Box;
 import de.onevision.math.Point;
 import de.onevision.math.TransMat;
 
 public final class Image implements Mark {
-    public Image(Path pathToFile, Point size, double knockoutStrength) {
+    public Image() {
+    }
+
+    public Image(Path pathToFile, Point size) {
         this.pathToFile = pathToFile;
-        this.size = size;
-        this.knockoutStrength = knockoutStrength;
+        this.clip = new Box();
+        clip.width = size.x();
+        clip.height = size.y();
+        this.knockoutThickness = Optional.empty();
         parse();
     }
 
-    private double knockoutStrength = 0;
-    private Point size = new Point();
-    private Path pathToFile = Locations.storageBasePath();
-    private TransMat TM = TransMat.identity();
+    public Optional<Double> knockoutThickness = Optional.empty();
+    public Box clip = new Box();
 
+    private Path pathToFile = Locations.storageBasePath();
+    private Point size = new Point();
+    private TransMat TM = TransMat.identity();
     private ArrayList<SpotColor> spotColors = new ArrayList<SpotColor>();
     private ArrayList<ReplaceColor> replaceColors = new ArrayList<ReplaceColor>();
+
+    final public Path pathToFile() {
+        return pathToFile;
+    }
+
+    public void pathToFile(Path path) {
+        pathToFile = path;
+        parse();
+    }
+
+    public void addReplaceColor(ReplaceColor color) {
+        replaceColors.add(color);
+    }
+
+    final public ArrayList<ReplaceColor> replaceColors() {
+        return replaceColors;
+    }
 
     @Override
     public void transform(TransMat TM) {
@@ -37,12 +63,17 @@ public final class Image implements Mark {
         Element markElem = (Element) elem.appendChild(doc.createElement("mark"));
         markElem.setAttribute("file", pathToFile.toString());
         markElem = TM.appendAttributes(markElem);
-        markElem.setAttribute("clip", "0 0 " + Double.toString(size.x()) + " " + Double.toString(size.y()));
-        markElem.setAttribute("knockout", Double.toString(knockoutStrength));
+        markElem.setAttribute("clip", "0 0 " + Double.toString(clip.width) + " " + Double.toString(clip.height));
+        if (!knockoutThickness.isEmpty()) {
+            markElem.setAttribute("knockout", knockoutThickness.get().toString());
+        }
+        else {
+            markElem.setAttribute("knockout", "0");
+        }
 
-        for (ReplaceColor replaceColor : replaceColors) {
+        for (SpotColor spotColor : spotColors) {
             Element replaceElem = (Element) elem.appendChild(doc.createElement("replace"));
-            replaceElem = replaceColor.replacement.appendAttributes(replaceElem);
+            replaceElem = spotColor.appendAttributes(replaceElem);
         }
 
         return elem;
@@ -52,14 +83,14 @@ public final class Image implements Mark {
     public void flatten() {
     }
 
-    public void replaceColors() {
+    public void applyReplacement() {
         ArrayList<SpotColor> newSpots = new ArrayList<>();
         newSpots.ensureCapacity(spotColors.size());
 
         for (ReplaceColor replaceColor : replaceColors) {
             if (replaceColor.toReplace.isPresent()) {
                 SpotColor repl = new SpotColor();
-                repl.colorant = replaceColor.toReplace.get();
+                repl.name = replaceColor.toReplace.get();
                 int index = spotColors.lastIndexOf(repl);
                 if (index >= 0) {
                     newSpots.add(index, replaceColor.replacement);
@@ -78,6 +109,8 @@ public final class Image implements Mark {
                 newSpots.add(index, replace);
             }
         }
+
+        spotColors = newSpots;
     }
 
     private void parse() {

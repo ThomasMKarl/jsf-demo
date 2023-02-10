@@ -1,33 +1,21 @@
 package de.onevision.marks;
 
 import de.onevision.math.TransMat;
-import de.onevision.font.TextSegment;
+import de.onevision.font.Segment;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public final class Text implements Mark {
-    private double knockoutStrength = 0;
+public final class Label implements Mark {
+    public Optional<Double> knockoutThickness = Optional.empty();
+    public ArrayList<Segment> segments = new ArrayList<Segment>();
     private TransMat TM = TransMat.identity();
 
-    public Text() {
+    public Label() {
     }
-
-    public void add(TextSegment seg) {
-        segments.add(seg);
-    }
-
-    public int numberOfElements() {
-        return segments.size();
-    }
-
-    public final ArrayList<TextSegment> segments() {
-        return segments;
-    }
-
-    private ArrayList<TextSegment> segments = new ArrayList<TextSegment>();
 
     @Override
     public void transform(TransMat TM) {
@@ -39,9 +27,14 @@ public final class Text implements Mark {
         Element containerElem = (Element)elem.appendChild(doc.createElement("container"));
         containerElem = TM.appendAttributes(containerElem);
         containerElem.setAttribute("layout", "flow");
-        containerElem.setAttribute("knockout", Double.toString(knockoutStrength));
+        if (!knockoutThickness.isEmpty()) {
+            containerElem.setAttribute("knockout", knockoutThickness.get().toString());
+        }
+        else {
+            containerElem.setAttribute("knockout", "0");
+        }
 
-        for(TextSegment segment : segments) {
+        for(Segment segment : segments) {
             containerElem = segment.generateXml(doc, containerElem);
         }
 
