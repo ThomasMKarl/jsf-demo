@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import de.onevision.Platform.Exceptions.Error;
 
@@ -41,12 +40,12 @@ public class XmlUtil {
     }
 
     static public Element getChild(Element elem, String name) throws Error {
-        NodeList nodes = elem.getElementsByTagName(name);
-        if (nodes.getLength() != 1) {
+        ArrayList<Element> nodes = getChildrenByTagName(elem, name);
+        if (nodes.size() != 1) {
             throw new Error(errorMessage, "", "no element (or many) named " + name + " in node " + elem.getNodeName());
         }
 
-        return (Element)nodes.item(0);
+        return nodes.get(0);
     }
 
     static public Object parseAttribute(Element elem, String name, Object type) throws Error {
@@ -68,41 +67,42 @@ public class XmlUtil {
     }
 
     static public Object parseElem(Element elem, String name, Object type) throws Error {
-        NodeList nodes = elem.getElementsByTagName(name);
-        if (nodes.getLength() != 1) {
+        ArrayList<Element> nodes = getChildrenByTagName(elem, name);
+        if (nodes.size() != 1) {
             throw new Error(errorMessage, "", "no element (or many) named " + name + " in node " + elem.getNodeName());
         }
 
-        Node node = nodes.item(0);
+        Element node = nodes.get(0);
         return toType(node.getTextContent(), type);
-    }
-
-    static public ArrayList<Element> getChildren(Element elem, String name) throws Error {
-        ArrayList<Element> list = new ArrayList<Element>();
-        NodeList nodes = elem.getElementsByTagName(name);
-        for (int index = 0; index < nodes.getLength(); ++index) {
-            list.add((Element)nodes.item(index));
-        }
-        return list;
     }
 
     static public ArrayList<Object> parseElems(Element elem, String name, Object type) throws Error {
         ArrayList<Object> list = new ArrayList<Object>();
-        NodeList nodes = elem.getElementsByTagName(name);
-        for (int index = 0; index < nodes.getLength(); ++index) {
-            Node node = nodes.item(index);
+        ArrayList<Element> nodes = getChildrenByTagName(elem, name);
+        for (Element node : nodes) {
             list.add(toType(node.getTextContent(), type));
         }
         return list;
     }
 
+    static public ArrayList<Element> getChildrenByTagName(Element parent, String name) {
+        ArrayList<Element> nodeList = new ArrayList<Element>();
+        for (Node child = parent.getFirstChild(); child != null; child = child.getNextSibling()) {
+            if (child.getNodeType() == Node.ELEMENT_NODE && name.equals(child.getNodeName())) {
+                nodeList.add((Element) child);
+            }
+        }
+
+        return nodeList;
+    }
+
     static public Optional<Object> parseElemOpt(Element elem, String name, Object type) throws Error {
-        NodeList nodes = elem.getElementsByTagName(name);
-        if (nodes.getLength() != 1) {
+        ArrayList<Element> nodes = getChildrenByTagName(elem, name);
+        if (nodes.size() != 1) {
             type = Optional.empty();
         }
 
-        Node node = nodes.item(0);
+        Element node = nodes.get(0);
         return Optional.of(toType(node.getTextContent(), type));
     }
 
@@ -134,13 +134,14 @@ public class XmlUtil {
         }
 
         for (String prefix : NS) {
-            NodeList nodes = elem.getElementsByTagName(prefix + ":" + name);
-            if (nodes.getLength() == 1) {
-                return (Element)nodes.item(0);
+            for (Node child = elem.getFirstChild(); child != null; child = child.getNextSibling()) {
+                if (child.getNodeType() == Node.ELEMENT_NODE && child.getNodeName().equals(prefix + ":" + name)) {
+                  return (Element)child;
+                }
             }
         }
 
-        throw new Error(errorMessage, "", "no element (or many) named " + name + " in node " + elem.getNodeName());
+        throw new Error(errorMessage, "", "no element named " + name + " in node " + elem.getNodeName());
     }
 
     static public Object parseAttribute(Element elem, String name, ArrayList<String> NS, Object type) throws Error {
@@ -193,10 +194,10 @@ public class XmlUtil {
         boolean found = false;
         String content = "";
         for (String prefix : NS) {
-            NodeList nodes = elem.getElementsByTagName(prefix + ":" + name);
-            if (nodes.getLength() == 1) {
+            ArrayList<Element> nodes = getChildrenByTagName(elem, prefix + ":" + name);
+            if (nodes.size() == 1) {
                 found = true;
-                content = nodes.item(0).getTextContent();
+                content = nodes.get(0).getTextContent();
                 break;
             }
         }
@@ -208,21 +209,6 @@ public class XmlUtil {
         return toType(content, type);
     }
 
-    static public ArrayList<Element> getChildren(Element elem, String name, ArrayList<String> NS) throws Error {
-        if (NS == null || NS.isEmpty()) {
-            return getChildren(elem, name);
-        }
-
-        ArrayList<Element> list = new ArrayList<Element>();
-        for (String prefix : NS) {
-            NodeList nodes = elem.getElementsByTagName(prefix + ":" + name);
-            for (int index = 0; index < nodes.getLength(); ++index) {
-                list.add((Element)nodes.item(index));
-            }
-        }
-        return list;
-    }
-    
     static public ArrayList<Object> parseElems(Element elem, String name, ArrayList<String> NS, Object type) throws Error {
         if (NS == null || NS.isEmpty()) {
             return parseElems(elem, name, type);
@@ -230,10 +216,24 @@ public class XmlUtil {
 
         ArrayList<Object> list = new ArrayList<Object>();
         for (String prefix : NS) {
-            NodeList nodes = elem.getElementsByTagName(prefix + ":" + name);
-            for (int index = 0; index < nodes.getLength(); ++index) {
-                Node node = nodes.item(index);
+            ArrayList<Element> nodes = getChildrenByTagName(elem, prefix + ":" + name);
+            for (Element node : nodes) {
                 list.add(toType(node.getTextContent(), type));
+            }
+        }
+        return list;
+    }
+
+    static public ArrayList<Element> getChildrenByTagName(Element elem, String name, ArrayList<String> NS) throws Error {
+        if (NS == null || NS.isEmpty()) {
+            return getChildrenByTagName(elem, name);
+        }
+
+        ArrayList<Element> list = new ArrayList<Element>();
+        for (String prefix : NS) {
+            ArrayList<Element> nodes = getChildrenByTagName(elem, prefix + ":" + name);
+            for (Element node : nodes) {
+                list.add(node);
             }
         }
         return list;
@@ -247,10 +247,10 @@ public class XmlUtil {
         boolean found = false;
         String content = "";
         for (String prefix : NS) {
-            NodeList nodes = elem.getElementsByTagName(prefix + ":" + name);
-            if (nodes.getLength() == 1) {
+            ArrayList<Element> nodes = getChildrenByTagName(elem, prefix + ":" + name);
+            if (nodes.size() == 1) {
                 found = true;
-                content = nodes.item(0).getTextContent();
+                content = nodes.get(0).getTextContent();
                 break;
             }
         }

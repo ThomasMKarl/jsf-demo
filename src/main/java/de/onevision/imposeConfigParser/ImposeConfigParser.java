@@ -26,7 +26,6 @@ import java.util.Optional;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 public class ImposeConfigParser {
@@ -114,10 +113,26 @@ public class ImposeConfigParser {
 
   public static Size getSize(Element node, ArrayList<String> NS) throws Error {
     Size size = new Size();
-    //XmlUtil.checkName(node, "size", NS);
-    //size.height = (Double)XmlUtil.parseElem(node, "height", NS, size.height);
-    //size.width = (Double)XmlUtil.parseElem(node, "width", NS, size.width);
+    XmlUtil.checkName(node, "size", NS);
+    size.height = (Double)XmlUtil.parseElem(node, "height", NS, size.height);
+    size.width = (Double)XmlUtil.parseElem(node, "width", NS, size.width);
     return size;
+  }
+
+  public static Undercut getUndercut(Element node, ArrayList<String> NS) throws Error {
+    Undercut undercut = new Undercut();
+    XmlUtil.checkName(node, "undercut", NS);
+    undercut.height = (Double)XmlUtil.parseElem(node, "height", NS, undercut.height);
+    undercut.width = (Double)XmlUtil.parseElem(node, "width", NS, undercut.width);
+    return undercut;
+  }
+
+  public static Excess getExcess(Element node, ArrayList<String> NS) throws Error {
+    Excess excess = new Excess();
+    XmlUtil.checkName(node, "excess", NS);
+    excess.height = (Double)XmlUtil.parseElem(node, "height", NS, excess.height);
+    excess.width = (Double)XmlUtil.parseElem(node, "width", NS, excess.width);
+    return excess;
   }
 
   public static Box getBox(Element node, ArrayList<String> NS) throws Error {
@@ -246,7 +261,7 @@ public class ImposeConfigParser {
   public static TransMat getMatrix(Element node, ArrayList<String> NS) throws Error {
     XmlUtil.checkName(node, "matrix", NS);
     String values = "";
-    values = (String)XmlUtil.parseAttribute(node, null, NS, values);
+    values = (String)XmlUtil.parseAttribute(node, "values", NS, values);
     return TransMat.fromString(values);
   }
 
@@ -330,11 +345,38 @@ public class ImposeConfigParser {
     printer.gripperMargin = (Double)XmlUtil.parseElem(node, "gripperMargin", NS, printer.gripperMargin);
     printer.name = (String)XmlUtil.parseElem(node, "name", NS, printer.name);
     printer.paperEdge = (Double)XmlUtil.parseElem(node, "paperEdge", NS, printer.paperEdge);
-    ArrayList<Element> children = XmlUtil.getChildren(node, "plate", NS);
+    ArrayList<Element> children = XmlUtil.getChildrenByTagName(node, "plate", NS);
     for(Element child : children) {
       printer.plates.add(getPlate(child, NS));
     }
     return printer;
+  }
+
+  public static Reconcile getReconcile(Element node, ArrayList<String> NS) throws Error {
+    Reconcile reconcile = new Reconcile();
+
+    Element excessNode = null;
+    Element undercutNode = null;
+    try {
+      excessNode = XmlUtil.getChild(node, "excess");
+    }
+    catch (Error e) {}
+    try {
+      undercutNode = XmlUtil.getChild(node, "undercut");
+    }
+    catch (Error e) {}
+
+    reconcile.excess = Optional.empty();
+    if (excessNode != null) {
+      reconcile.excess = Optional.of(getExcess(excessNode, NS));
+    }
+
+    reconcile.undercut = Optional.empty();
+    if(undercutNode != null) {
+      reconcile.undercut = Optional.of(getUndercut(undercutNode, NS));
+    }
+
+    return reconcile;
   }
 
   public static PagePos getPagePos(Element node, ArrayList<String> NS) throws Error {
@@ -351,6 +393,18 @@ public class ImposeConfigParser {
     pagePos.bleedBottom = (Double)XmlUtil.parseElem(node, "bleedBottom", NS, pagePos.bleedBottom);
     pagePos.bleedCut = (Double)XmlUtil.parseElem(node, "bleedCut", NS, pagePos.bleedCut);
     pagePos.bleedTop = (Double)XmlUtil.parseElem(node, "bleedTop", NS, pagePos.bleedTop);
+
+    pagePos.reconcile = Optional.empty();
+    Element reconcileNode = null;
+    try {
+      reconcileNode = XmlUtil.getChild(node, "reconcile", NS);
+    }
+    catch (Error e) {}
+
+    if (reconcileNode != null) {
+      pagePos.reconcile = Optional.of(getReconcile(reconcileNode, NS));
+    }
+
     return pagePos;
   }
 
@@ -380,6 +434,11 @@ public class ImposeConfigParser {
     output.collectForms = getCollect(XmlUtil.getChild(node, "collectForms", NS), NS);
     output.layoutMode = (Boolean)XmlUtil.parseElem(node, "layoutMode", NS, output.layoutMode);
     output.tilingMode = (Boolean)XmlUtil.parseElem(node, "tilingMode", NS, output.tilingMode);
+    Optional<Object> help = XmlUtil.parseElemOpt(node, "previewMode", NS, false);
+    output.previewMode = false;
+    if(help.isPresent()) {
+      output.previewMode = help.map(v -> (Boolean) v).get();
+    }
     output.namestyle = (String)XmlUtil.parseElem(node, "namestyle", NS, output.namestyle);
     output.title = (String)XmlUtil.parseElem(node, "title", NS, output.title);
     return output;
@@ -536,7 +595,7 @@ public class ImposeConfigParser {
   public static Row getRow(Element node, ArrayList<String> NS) throws Error {
     Row row = new Row();
     XmlUtil.checkName(node, "row", NS);
-    ArrayList<Element> children = XmlUtil.getChildren(node, "cell", NS);
+    ArrayList<Element> children = XmlUtil.getChildrenByTagName(node, "cell", NS);
     for (Element child : children) {
       row.cells.add(getCell(child, NS));
     }
@@ -549,7 +608,7 @@ public class ImposeConfigParser {
     layout.active = (Boolean)XmlUtil.parseElem(node, "active", NS, layout.active);
     layout.horizontal = (Boolean)XmlUtil.parseElem(node, "horizontal", NS, layout.horizontal);
     layout.name = (String)XmlUtil.parseElem(node, "name", NS, layout.name);
-    ArrayList<Element> children = XmlUtil.getChildren(node, "row", NS);
+    ArrayList<Element> children = XmlUtil.getChildrenByTagName(node, "row", NS);
     for (Element child : children) {
       layout.rows.add(getRow(child, NS));
     }
@@ -568,7 +627,7 @@ public class ImposeConfigParser {
     model.remainderSheet = getRemainderSheet(XmlUtil.getChild(node, "remainderSheet", NS), NS);
     model.reversePages = (Boolean)XmlUtil.parseElem(node, "reversePages", NS, model.reversePages);
     model.singleSided = (Boolean)XmlUtil.parseElem(node, "singleSided", NS, model.singleSided);
-    ArrayList<Element> children = XmlUtil.getChildren(node, "layout", NS);
+    ArrayList<Element> children = XmlUtil.getChildrenByTagName(node, "layout", NS);
     for (Element child : children) {
       model.layouts.add(getLayout(child, NS));
     }
@@ -708,8 +767,8 @@ public class ImposeConfigParser {
   public static Circle getCircle(Element node, ArrayList<String> NS) throws Error {
     Circle circle = new Circle();
     XmlUtil.checkName(node, "circle", NS);
-    circle.radius = (Double)XmlUtil.parseAttribute(node, "radius", circle.radius);
-    circle.thickness = (Double)XmlUtil.parseAttribute(node, "thickness", circle.thickness);
+    circle.radius = (Double)XmlUtil.parseElem(node, "radius", NS, circle.radius);
+    circle.thickness = (Double)XmlUtil.parseElem(node, "thickness", NS, circle.thickness);
     circle.spotColor = getSpotColor(XmlUtil.getChild(node, "color", NS), NS);;
     Optional<Object> help = XmlUtil.parseElemOpt(node, "knockoutThickness", NS, 0.0);
     if(help.isPresent()) {
@@ -739,7 +798,7 @@ public class ImposeConfigParser {
     if(help.isPresent()) {
       label.knockoutThickness = help.map(v -> (Double) v);
     }
-    ArrayList<Element> children = XmlUtil.getChildren(node, "segment", NS);
+    ArrayList<Element> children = XmlUtil.getChildrenByTagName(node, "segment", NS);
     for (Element child : children) {
       label.segments.add(getSegment(child, NS));
     }
@@ -749,9 +808,9 @@ public class ImposeConfigParser {
   
   public static Image getImage(Element node, ArrayList<String> NS) throws Error {
     XmlUtil.checkName(node, "image", NS);
-    Point point = new Point((Double)XmlUtil.parseElem(node, "width", NS, 0.0), 
-                            (Double)XmlUtil.parseElem(node, "height", NS, 0.0));
-    Image image = new Image(Path.of((String)XmlUtil.parseElem(node, "path", new String())), point);
+    Point point = new Point((Double)XmlUtil.parseElem(XmlUtil.getChild(node, "clip", NS), "width", NS, 0.0), 
+                            (Double)XmlUtil.parseElem(XmlUtil.getChild(node, "clip", NS), "height", NS, 0.0));
+    Image image = new Image(Path.of((String)XmlUtil.parseElem(node, "path", NS, new String())), point);
     Optional<Object> help = XmlUtil.parseElemOpt(node, "knockoutThickness", NS, 0.0);
     if(help.isPresent()) {
       image.knockoutThickness = help.map(v -> (Double) v);
@@ -762,7 +821,7 @@ public class ImposeConfigParser {
   }
   
   public static BarcodeStyle getBarcodeStyle(Element node, ArrayList<String> NS) throws Error {
-    XmlUtil.checkName(node, "barcodeStyle", NS);
+    XmlUtil.checkName(node, "style", NS);
 
     String value = node.getTextContent();
 
@@ -790,7 +849,7 @@ public class ImposeConfigParser {
   
   public static BarcodeSize getBarcodeSize(Element node, ArrayList<String> NS) throws Error {
     BarcodeSize barcodeSize = new BarcodeSize();
-    XmlUtil.checkName(node, "barcodeSize", NS);
+    XmlUtil.checkName(node, "size", NS);
     barcodeSize.elementSize = (Double)XmlUtil.parseElem(node, "elementSize", NS, barcodeSize.elementSize);
     barcodeSize.height = (Double)XmlUtil.parseElem(node, "height", NS, barcodeSize.height);
     barcodeSize.quietZone = (Double)XmlUtil.parseElem(node, "quietZone", NS, barcodeSize.quietZone);
@@ -800,7 +859,7 @@ public class ImposeConfigParser {
   
   public static BarcodeCopies getBarcodeCopies(Element node, ArrayList<String> NS) throws Error {
     BarcodeCopies barcodeCopies = new BarcodeCopies();
-    XmlUtil.checkName(node, "barcodeCopies", NS);
+    XmlUtil.checkName(node, "copy", NS);
     barcodeCopies.maxNum = (Integer)XmlUtil.parseElem(node, "maxNum", NS, barcodeCopies.maxNum);
     barcodeCopies.spacing = (Double)XmlUtil.parseElem(node, "spacing", NS, barcodeCopies.spacing);
     return barcodeCopies;
@@ -808,10 +867,11 @@ public class ImposeConfigParser {
   
   public static Barcode getBarcode(Element node, ArrayList<String> NS) throws Error {
     Barcode barcode = new Barcode();
-    XmlUtil.checkName(node, "Barcode", NS);
-    barcode.barcodeCopies = getBarcodeCopies(XmlUtil.getChild(node, "barcodeCopies", NS), NS);
-    barcode.barcodeSize = getBarcodeSize(XmlUtil.getChild(node, "barcodeSize", NS), NS);
-    barcode.barcodeStyle = getBarcodeStyle(XmlUtil.getChild(node, "barcodeStyle", NS), NS);
+    XmlUtil.checkName(node, "barcode", NS);
+
+    barcode.barcodeCopies = getBarcodeCopies(XmlUtil.getChild(node, "copy", NS), NS);
+    barcode.barcodeSize = getBarcodeSize(XmlUtil.getChild(node, "size", NS), NS);
+    barcode.barcodeStyle = getBarcodeStyle(XmlUtil.getChild(node, "style", NS), NS);
     barcode.displayText = (Boolean)XmlUtil.parseElem(node, "displayText", NS, barcode.displayText);
     Optional<Object> help = XmlUtil.parseElemOpt(node, "knockoutThickness", NS, 0.0);
     if(help.isPresent()) {
@@ -823,41 +883,67 @@ public class ImposeConfigParser {
   
   public static Mark getMark(Element node, ArrayList<String> NS) throws Error {
     XmlUtil.checkName(node, "mark", NS);
+  
+    Element child = null;
+    try {
+      child = XmlUtil.getChild(node, "line", NS);
+    }
+    catch (Error e) {}
+    try {
+      child = XmlUtil.getChild(node, "circle", NS);
+    }
+    catch (Error e) {}
+    try {
+      child = XmlUtil.getChild(node, "rectangle", NS);
+    }
+    catch (Error e) {}
+    try {
+      child = XmlUtil.getChild(node, "image", NS);
+    }
+    catch (Error e) {}
+    try {
+      child = XmlUtil.getChild(node, "label", NS);
+    }
+    catch (Error e) {}
+    try {
+      child = XmlUtil.getChild(node, "barcode", NS);
+    }
+    catch (Error e) {}
+    try {
+      child = XmlUtil.getChild(node, "markGroup", NS);
+    }
+    catch (Error e) {}
 
-    Node child = node.getFirstChild();
     if (child == null) {
-      throw new Error("empty \"mark\" element");
+      throw new Error("mark type cannot be matched with \"mark\"");
     }
 
-    ////TBI
-    String type = child.
+    String type = child.getNodeName();
     String[] split = type.split(":");
     type = split[split.length - 1];
-
-  
     if (type.equals("line")) {
-      return getLine(XmlUtil.getChild(node, "line", NS), NS);
+      return getLine(child, NS);
     }
     if (type.equals("circle")) {
-      return getCircle(XmlUtil.getChild(node, "circle", NS), NS);
+      return getCircle(child, NS);
     }
     if (type.equals("rectangle")) {
-      return getRectangle(XmlUtil.getChild(node, "rectangle", NS), NS);
+      return getRectangle(child, NS);
     }
     if (type.equals("image")) {
-      return getImage(XmlUtil.getChild(node, "image", NS), NS);
+      return getImage(child, NS);
     }
     if (type.equals("label")) {
-      return getLabel(XmlUtil.getChild(node, "label", NS), NS);
+      return getLabel(child, NS);
     }
     if (type.equals("barcode")) {
-      return getBarcode(XmlUtil.getChild(node, "barcode", NS), NS);
+      return getBarcode(child, NS);
     }
     if (type.equals("markGroup")) {
-      return getGroup(XmlUtil.getChild(node, "markGroup", NS), NS);
+      return getGroup(child, NS);
     }
 
-    throw new Error("mark type \"" + type + "\" cannot be matched with \"mark\"");
+    throw new Error("mark type cannot be matched with \"mark\"");
   }
   
   public static Group getGroup(Element node, ArrayList<String> NS) throws Error {
@@ -868,7 +954,7 @@ public class ImposeConfigParser {
     group.mirror = getMirror(XmlUtil.getChild(node, "mirror", NS), NS);
     group.name = (String)XmlUtil.parseElem(node, "name", NS, group.name);
     group.size = getSize(XmlUtil.getChild(node, "size", NS), NS);
-    ArrayList<Element> children = XmlUtil.getChildren(node, "mark", NS);
+    ArrayList<Element> children = XmlUtil.getChildrenByTagName(node, "mark", NS);
     for(Element child : children) {
       group.marks.add(getMark(child, NS));
     }
@@ -968,7 +1054,7 @@ public class ImposeConfigParser {
     colorControl.alignment = getAlignment(XmlUtil.getChild(node, "alignment", NS), NS);
     colorControl.excludeColors = XmlUtil.mapAll(XmlUtil.parseElems(node, "excludeColors", NS, new String()), v -> (String)v);
     colorControl.horizontal = (Boolean)XmlUtil.parseElem(node, "horizontal", NS, colorControl.horizontal);
-    ArrayList<Element> children = XmlUtil.getChildren(node, "includeColor", NS);
+    ArrayList<Element> children = XmlUtil.getChildrenByTagName(node, "includeColor", NS);
     for (Element child : children) {
       colorControl.includeColors.add(getIncludeColor(child, NS));
     }
@@ -990,7 +1076,7 @@ public class ImposeConfigParser {
     colorBar.alignment = getAlignment(XmlUtil.getChild(node, "alignment", NS), NS);
     colorBar.excludeColors = XmlUtil.mapAll(XmlUtil.parseElems(node, "excludeColors", NS, new String()), v -> (String)v);
     colorBar.horizontal = (Boolean)XmlUtil.parseElem(node, "horizontal", NS, colorBar.horizontal);
-    ArrayList<Element> children = XmlUtil.getChildren(node, "includeColor", NS);
+    ArrayList<Element> children = XmlUtil.getChildrenByTagName(node, "includeColor", NS);
     for (Element child : children) {
       colorBar.includeColors.add(getIncludeColor(child, NS));
     }
@@ -1060,12 +1146,12 @@ public class ImposeConfigParser {
       calcMarks.marginMarks = Optional.of(getMarginMarks(marginMarksNode, NS));
     }
 
-    ArrayList<Element> children = XmlUtil.getChildren(node, "colorBar", NS);
+    ArrayList<Element> children = XmlUtil.getChildrenByTagName(node, "colorBar", NS);
     for (Element child : children) {
       calcMarks.colorBars.add(getColorBar(child, NS));
     }
 
-    children = XmlUtil.getChildren(node, "colorControl", NS);
+    children = XmlUtil.getChildrenByTagName(node, "colorControl", NS);
     for (Element child : children) {
       calcMarks.colorControls.add(getColorControl(child, NS));
     }
@@ -1077,20 +1163,56 @@ public class ImposeConfigParser {
     Marks marks = new Marks();
     XmlUtil.checkName(node, "marks", NS);
     marks.calcMarks = getCalcMarks(XmlUtil.getChild(node, "calculatedMarks", NS), NS);
+
+    Element plateMarksNode = null;
+    Element sheetMarksNode = null;
+    Element printedSheetMarksNode = null;
+    Element pageMarksNode = null;
+    try {
+      plateMarksNode = XmlUtil.getChild(node, "plateMarks", NS);
+    }
+    catch (Error e) {}
+    try {
+      sheetMarksNode = XmlUtil.getChild(node, "sheetMarks", NS);
+    }
+    catch (Error e) {}
+    try {
+      printedSheetMarksNode = XmlUtil.getChild(node, "printedSheetMarks", NS);
+    }
+    catch (Error e) {}
+    try {
+      pageMarksNode = XmlUtil.getChild(node, "pageMarks", NS);
+    }
+    catch (Error e) {}
     
-    ArrayList<Element> children = XmlUtil.getChildren(XmlUtil.getChild(node, "plateMarks", NS), "markGroup", NS);
+    ArrayList<Element> children = new ArrayList<Element>();
+    if (plateMarksNode != null) {
+      children = XmlUtil.getChildrenByTagName(plateMarksNode, "markGroup", NS);
+    }
     for (Element child : children) {
       marks.plateMarks.add(getGroup(child, NS));
     }
-    children = XmlUtil.getChildren(XmlUtil.getChild(node, "sheetMarks", NS), "markGroup", NS);
+
+    children.clear();
+    if (sheetMarksNode != null) {
+      children = XmlUtil.getChildrenByTagName(sheetMarksNode, "markGroup", NS);
+    }
     for (Element child : children) {
       marks.sheetMarks.add(getGroup(child, NS));
     }
-    children = XmlUtil.getChildren(XmlUtil.getChild(node, "printedSheetMarks", NS), "markGroup", NS);
+
+    children.clear();
+    if (printedSheetMarksNode != null) {
+      children = XmlUtil.getChildrenByTagName(printedSheetMarksNode, "markGroup", NS);
+    }
     for (Element child : children) {
       marks.printedSheetMarks.add(getGroup(child, NS));
     }
-    children = XmlUtil.getChildren(XmlUtil.getChild(node, "pageMarks", NS), "markGroup", NS);
+
+    children.clear();
+    if (pageMarksNode != null) {
+      children = XmlUtil.getChildrenByTagName(pageMarksNode, "markGroup", NS);
+    }
     for (Element child : children) {
       marks.plateMarks.add(getGroup(child, NS));
     }

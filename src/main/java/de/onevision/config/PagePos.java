@@ -1,7 +1,10 @@
 package de.onevision.config;
 
+import java.util.Optional;
+
 public class PagePos {
   public Format format;
+  public Optional<Reconcile> reconcile = Optional.empty();
   public boolean useMediaBox = false;
   public Rotation rotationAroundSelf = Rotation.up;
   public Alignment alignment = Alignment.bottomLeft;

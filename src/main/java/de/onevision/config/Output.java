@@ -8,4 +8,5 @@ public class Output {
   public String title = "";
   public boolean tilingMode = false;
   public boolean layoutMode = false;
+  public boolean previewMode = false;
 }

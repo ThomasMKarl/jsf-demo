@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.logging.log4j.*;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
@@ -19,6 +21,7 @@ import de.onevision.OutXml.OutXml;
 import de.onevision.PdfParser.*;
 import de.onevision.Platform.Application;
 import de.onevision.Platform.Locations;
+import de.onevision.Platform.XmlWriter;
 import de.onevision.Platform.Exceptions.*;
 import de.onevision.Platform.Exceptions.Error;
 import de.onevision.config.ImposeConfig;
@@ -100,12 +103,16 @@ public class App {
         ovpdfInfoHandle.execute(args, false);
     }
 
-    private static void impl3() throws Error {
+    private static void impl3() throws Error, ParserConfigurationException {
         Path inputFile = Locations.resources().resolve("3CrossFold.ic");
         String filename = Locations.removeFileExtension(inputFile, false);
         extractTar(inputFile, appTempFolder);
         ImposeConfigParser imposeConfigParser = new ImposeConfigParser(appTempFolder, filename);
         ImposeConfig imposeConfig = imposeConfigParser.createImposeConfig();
+
+        XmlWriter xmlWriter = new XmlWriter();
+        xmlWriter.add("test", 0, false);
+        xmlWriter.write(null, 1);
     }
 
     private static void cleanup() {

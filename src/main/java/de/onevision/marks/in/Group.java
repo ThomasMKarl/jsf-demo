@@ -16,7 +16,7 @@ public final class Group implements Mark {
     public de.onevision.config.Alignment alignment = Alignment.bottomLeft;
     public Mirror mirror;
     public FormSelect formSelect;
-    public ArrayList<Mark> marks;
+    public ArrayList<Mark> marks = new ArrayList<Mark>();
     private TransMat TM = TransMat.identity();
 
     public void flatten() {
