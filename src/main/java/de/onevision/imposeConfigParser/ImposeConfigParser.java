@@ -78,16 +78,23 @@ public class ImposeConfigParser {
   public ImposeConfig createImposeConfig() throws Error {
     ImposeConfig imposeConfig = new ImposeConfig();
 
-    imposeConfig.pagePos = getPagePos(XmlUtil.getChild(targetRoot, "pagePos", NS), NS);
-    imposeConfig.output = getOutput(XmlUtil.getChild(targetRoot, "output", NS), NS);
-    try {
-      imposeConfig.stepAndRepeat = Optional.of(getStepAndRepeat(XmlUtil.getChild(targetRoot, "stepAndRepeat", NS), NS));
-    }
-    catch (Error e) {
-      imposeConfig.stepAndRepeat = Optional.empty();
+    if (targetRoot != null) {
+      var pagePosNode = XmlUtil.getChild(targetRoot, "pagePos", NS);
+      imposeConfig.pagePos = getPagePos(pagePosNode, NS);
+      var outputNode = XmlUtil.getChild(targetRoot, "output", NS);
+      imposeConfig.output = getOutput(outputNode, NS);
+      try {
+        var sarNode = XmlUtil.getChild(targetRoot, "stepAndRepeat", NS);
+        imposeConfig.stepAndRepeat = Optional.of(getStepAndRepeat(sarNode, NS));
+      }
+      catch (Error e) {
+        imposeConfig.stepAndRepeat = Optional.empty();
+      }
     }
 
-    imposeConfig.model = getModel(XmlUtil.getChild(modelRoot, "model", NS), NS);
+    if (modelRoot != null) {
+      imposeConfig.model = getModel(XmlUtil.getChild(modelRoot, "model", NS), NS);
+    }
 
     int index = 0;
     for(Element deviceParamsRoot : deviceParamsRoots) {
@@ -358,11 +365,11 @@ public class ImposeConfigParser {
     Element excessNode = null;
     Element undercutNode = null;
     try {
-      excessNode = XmlUtil.getChild(node, "excess");
+      excessNode = XmlUtil.getChild(node, "excess", NS);
     }
     catch (Error e) {}
     try {
-      undercutNode = XmlUtil.getChild(node, "undercut");
+      undercutNode = XmlUtil.getChild(node, "undercut", NS);
     }
     catch (Error e) {}
 
@@ -877,6 +884,7 @@ public class ImposeConfigParser {
     if(help.isPresent()) {
       barcode.knockoutThickness = help.map(v -> (Double) v);
     }
+    barcode.segment = getSegment(XmlUtil.getChild(node, "segment", NS), NS);
     barcode.transform(getMatrix(XmlUtil.getChild(node, "matrix", NS), NS));
     return barcode;
   }
@@ -975,7 +983,7 @@ public class ImposeConfigParser {
 
     return trimMarks;
   }
-  
+
   public static BleedMarks getBleedMarks(Element node, ArrayList<String> NS) throws Error {
     BleedMarks bleedMarks = new BleedMarks();
     XmlUtil.checkName(node, "bleedMarks", NS);
@@ -988,7 +996,7 @@ public class ImposeConfigParser {
     }
     return bleedMarks;
   }
-  
+
   public static CollationMarks getCollationMarks(Element node, ArrayList<String> NS) throws Error {
     CollationMarks collationMarks = new CollationMarks();
     XmlUtil.checkName(node, "collationMarks", NS);
@@ -1006,9 +1014,10 @@ public class ImposeConfigParser {
     catch (Error e) {}
     collationMarks.position = getPosition(XmlUtil.getChild(node, "position", NS), NS);
     collationMarks.thickness = (Double)XmlUtil.parseElem(node, "thickness", NS, collationMarks.thickness);
+    collationMarks.shading = getShading(XmlUtil.getChild(node, "shading", NS), NS);
     return collationMarks;
   }
-  
+
   public static CutMarks getCutMarks(Element node, ArrayList<String> NS) throws Error {
     CutMarks cutMarks = new CutMarks();
     XmlUtil.checkName(node, "cutMarks", NS);
@@ -1162,7 +1171,16 @@ public class ImposeConfigParser {
   public static Marks getMarks(Element node, ArrayList<String> NS) throws Error {
     Marks marks = new Marks();
     XmlUtil.checkName(node, "marks", NS);
-    marks.calcMarks = getCalcMarks(XmlUtil.getChild(node, "calculatedMarks", NS), NS);
+
+    Element calcMarksNode = null;
+    try {
+      calcMarksNode = XmlUtil.getChild(node, "calculatedMarks", NS);
+    }
+    catch (Error e) {}
+
+    if (calcMarksNode != null) {
+      marks.calcMarks = Optional.of(getCalcMarks(calcMarksNode, NS));
+    }
 
     Element plateMarksNode = null;
     Element sheetMarksNode = null;
@@ -1185,36 +1203,52 @@ public class ImposeConfigParser {
     }
     catch (Error e) {}
     
-    ArrayList<Element> children = new ArrayList<Element>();
+    var children = new ArrayList<Element>();
+    var plateMarks = new PlateMarks();
     if (plateMarksNode != null) {
       children = XmlUtil.getChildrenByTagName(plateMarksNode, "markGroup", NS);
     }
     for (Element child : children) {
-      marks.plateMarks.add(getGroup(child, NS));
+      plateMarks.markGroups.add(getGroup(child, NS));
+    }
+    if (!plateMarks.markGroups.isEmpty()) {
+      marks.plateMarks = Optional.of(plateMarks);
     }
 
     children.clear();
+    var sheetMarks = new SheetMarks();
     if (sheetMarksNode != null) {
       children = XmlUtil.getChildrenByTagName(sheetMarksNode, "markGroup", NS);
     }
     for (Element child : children) {
-      marks.sheetMarks.add(getGroup(child, NS));
+      sheetMarks.markGroups.add(getGroup(child, NS));
+    }
+    if (!sheetMarks.markGroups.isEmpty()) {
+      marks.sheetMarks = Optional.of(sheetMarks);
     }
 
     children.clear();
+    var printedSheetMarks = new PrintedSheetMarks();
     if (printedSheetMarksNode != null) {
       children = XmlUtil.getChildrenByTagName(printedSheetMarksNode, "markGroup", NS);
     }
     for (Element child : children) {
-      marks.printedSheetMarks.add(getGroup(child, NS));
+      printedSheetMarks.markGroups.add(getGroup(child, NS));
+    }
+    if (!printedSheetMarks.markGroups.isEmpty()) {
+      marks.printedSheetMarks = Optional.of(printedSheetMarks);
     }
 
     children.clear();
+    var pageMarks = new PageMarks();
     if (pageMarksNode != null) {
       children = XmlUtil.getChildrenByTagName(pageMarksNode, "markGroup", NS);
     }
     for (Element child : children) {
-      marks.plateMarks.add(getGroup(child, NS));
+      pageMarks.markGroups.add(getGroup(child, NS));
+    }
+    if (!pageMarks.markGroups.isEmpty()) {
+      marks.pageMarks = Optional.of(pageMarks);
     }
 
     return marks;

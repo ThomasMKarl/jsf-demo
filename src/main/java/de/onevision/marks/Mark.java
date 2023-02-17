@@ -8,6 +8,8 @@ import de.onevision.math.TransMat;
 public interface Mark {
     public void transform(TransMat TM);
 
+    public TransMat getTM();
+
     public void flatten();
 
     public Element generateXml(Document doc, Element elem);

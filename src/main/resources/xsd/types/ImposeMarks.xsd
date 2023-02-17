@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:ict="https://www.onevision.com/ImposeCommonTypes"
+  xmlns:ima="https://www.onevision.com/ImposeMarks"
+  targetNamespace="https://www.onevision.com/ImposeMarks"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+
+<xs:import schemaLocation="ImposeCommonTypes.xsd"
+  namespace="https://www.onevision.com/ImposeCommonTypes" />
+
+<xs:simpleType name="FrontBack">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="front" />
+    <xs:enumeration value="back" />
+    <xs:enumeration value="frontAndBack" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="FormSelect">
+  <xs:sequence>
+    <xs:element name="frontBack" type="ima:FrontBack" minOccurs="1" maxOccurs="1" />
+    <xs:element name="pageSelector" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="formSelector" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="sheetSelector" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="mediaSelector" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="mirrorBack" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Mirror">
+  <xs:sequence>
+    <xs:element name="horizontal" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="vertical" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="point" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="LineAppearance">
+  <xs:sequence>
+    <xs:element name="length" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="distance" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="thickness" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="Origin">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="head" />
+    <xs:enumeration value="foot" />
+    <xs:enumeration value="back" />
+    <xs:enumeration value="face" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="Direction">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="headFoot" />
+    <xs:enumeration value="footHead" />
+    <xs:enumeration value="backFace" />
+    <xs:enumeration value="faceBack" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="Position">
+  <xs:sequence>
+    <xs:element name="offsetParallel" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="offsetNormal" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="origin" type="ima:Origin" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="IncludeColor">
+  <xs:sequence>
+    <xs:element name="name" type="xs:string" />
+    <xs:element name="cmyk" type="ict:Cmyk" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Numbering">
+  <xs:sequence>
+    <xs:element name="name" type="xs:string" />
+    <xs:element name="style" type="xs:string" />
+    <xs:element name="rotation" type="ict:Rotation" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Line">
+  <xs:sequence>
+    <xs:element name="length" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="thickness" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="matrix" type="ict:Matrix" minOccurs="1" maxOccurs="1" />
+    <xs:element name="color" type="ict:SpotColor" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Circle">
+  <xs:sequence>
+    <xs:element name="radius" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="thickness" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="matrix" type="ict:Matrix" minOccurs="1" maxOccurs="1" />
+    <xs:element name="color" type="ict:SpotColor" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Rectangle">
+  <xs:sequence>
+    <xs:element name="size" type="ict:Size" minOccurs="1" maxOccurs="1" />
+    <xs:element name="matrix" type="ict:Matrix" minOccurs="1" maxOccurs="1" />
+    <xs:element name="color" type="ict:SpotColor" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Label">
+  <xs:sequence>
+    <xs:element name="segment" type="ict:Segment" minOccurs="1" maxOccurs="unbounded" />
+    <xs:element name="matrix" type="ict:Matrix" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Image">
+  <xs:sequence>
+    <xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="clip" type="ict:Box" minOccurs="1" maxOccurs="1" />
+    <xs:element name="matrix" type="ict:Matrix" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+    <xs:element name="replaceColor" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="BarcodeStyle">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="interleaved" />
+    <xs:enumeration value="code128" />
+    <xs:enumeration value="dataMatrix" />
+    <xs:enumeration value="dataMatrixRect" />
+    <xs:enumeration value="qr" />
+    <xs:enumeration value="qrMicro" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="BarcodeSize">
+  <xs:sequence>
+    <xs:element name="height" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="elementSize" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="quietZone" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="wideToNarrow" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="BarcodeCopies">
+  <xs:sequence>
+    <xs:element name="maxNum" type="xs:positiveInteger" minOccurs="1" maxOccurs="1" />
+    <xs:element name="spacing" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Barcode">
+  <xs:sequence>
+    <xs:element name="style" type="ima:BarcodeStyle" minOccurs="1" maxOccurs="1" />
+    <xs:element name="size" type="ima:BarcodeSize" minOccurs="1" maxOccurs="1" />
+    <xs:element name="segment" type="ict:Segment" minOccurs="1" maxOccurs="1" />
+    <xs:element name="copy" type="ima:BarcodeCopies" minOccurs="1" maxOccurs="1" />
+    <xs:element name="displayText" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="matrix" type="ict:Matrix" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="GenericMark">
+  <xs:choice>
+    <xs:element name="line" type="ima:Line" />
+    <xs:element name="circle" type="ima:Circle" />
+    <xs:element name="rectangle" type="ima:Rectangle" />
+    <xs:element name="image" type="ima:Image" />
+    <xs:element name="label" type="ima:Label" />
+    <xs:element name="barcode" type="ima:Barcode" />
+    <xs:element name="markGroup" type="ima:GenericMarkGroup" />
+  </xs:choice>
+</xs:complexType>
+
+<xs:complexType name="GenericMarkGroup">
+  <xs:sequence>
+    <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="size" type="ict:Size" minOccurs="0" maxOccurs="1" />
+    <xs:element name="alignment" type="ict:Alignment" minOccurs="1" maxOccurs="1" />
+    <xs:element name="matrix" type="ict:Matrix" minOccurs="1" maxOccurs="1" />
+    <xs:element name="mirror" type="ima:Mirror" minOccurs="1" maxOccurs="1" />
+    <xs:element name="formSelect" type="ima:FormSelect" minOccurs="1" maxOccurs="1" />
+    <xs:element name="mark" type="ima:GenericMark" minOccurs="1" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="TrimMarks">
+  <xs:sequence>
+    <xs:element name="lineAppearance" type="ima:LineAppearance" minOccurs="1" maxOccurs="1" />
+    <xs:element name="printInner" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="color" type="ict:SpotColor" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="BleedMarks">
+  <xs:sequence>
+    <xs:element name="lineAppearance" type="ima:LineAppearance" minOccurs="1" maxOccurs="1" />
+    <xs:element name="printInner" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="color" type="ict:SpotColor" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CollationMarks">
+  <xs:sequence>
+    <xs:element name="length" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="thickness" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="position" type="ima:Position" minOccurs="1" maxOccurs="1" />
+    <xs:element name="direction" type="ima:Direction" minOccurs="1" maxOccurs="1" />
+    <xs:element name="shading" type="ict:Shading" minOccurs="1" maxOccurs="1" />
+    <xs:element name="color" type="ict:SpotColor" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+    <xs:element name="numbering" type="ima:Numbering" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CutMarks">
+  <xs:sequence>
+    <xs:element name="lineAppearance" type="ima:LineAppearance" minOccurs="1" maxOccurs="1" />
+    <xs:element name="activateCrosses" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="color" type="ict:SpotColor" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="FoldMarks">
+  <xs:sequence>
+    <xs:element name="lineAppearance" type="ima:LineAppearance" minOccurs="1" maxOccurs="1" />
+    <xs:element name="activateCrosses" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="color" type="ict:SpotColor" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="MarginMarks">
+  <xs:sequence>
+    <xs:element name="lineAppearance" type="ima:LineAppearance" minOccurs="1" maxOccurs="1" />
+    <xs:element name="activateCrosses" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="color" type="ict:SpotColor" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ColorControl">
+  <xs:sequence>
+    <xs:element name="horizontal" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="size" type="ict:Size" minOccurs="1" maxOccurs="1" />
+    <xs:element name="space" type="ict:Space" minOccurs="1" maxOccurs="1" />
+    <xs:element name="alignment" type="ict:Alignment" minOccurs="1" maxOccurs="1" />
+    <xs:element name="offset" type="ict:Offset" minOccurs="1" maxOccurs="1" />
+    <xs:element name="margin" type="ict:Margin" minOccurs="1" maxOccurs="1" />
+    <xs:element name="shading" type="ict:Shading" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+    <xs:element name="includeColor" type="ima:IncludeColor" minOccurs="0" maxOccurs="unbounded" />
+    <xs:element name="excludeColor" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ColorBar">
+  <xs:sequence>
+    <xs:element name="horizontal" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="size" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="space" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="alignment" type="ict:Alignment" minOccurs="1" maxOccurs="1" />
+    <xs:element name="offset" type="ict:Offset" minOccurs="1" maxOccurs="1" />
+    <xs:element name="margin" type="ict:Margin" minOccurs="1" maxOccurs="1" />
+    <xs:element name="intensity" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="knockoutThickness" type="xs:double" minOccurs="0" maxOccurs="1" />
+    <xs:element name="includeColor" type="ima:IncludeColor" minOccurs="0" maxOccurs="unbounded" />
+    <xs:element name="excludeColor" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CalculatedMarks">
+  <xs:sequence>
+    <xs:element name="trimMarks" type="ima:TrimMarks" minOccurs="0" maxOccurs="1" />
+    <xs:element name="bleedMarks" type="ima:BleedMarks" minOccurs="0" maxOccurs="1" />
+    <xs:element name="collationMarks" type="ima:CollationMarks" minOccurs="0" maxOccurs="1" />
+    <xs:element name="cutMarks" type="ima:CutMarks" minOccurs="0" maxOccurs="1" />
+    <xs:element name="foldMarks" type="ima:FoldMarks" minOccurs="0" maxOccurs="1" />
+    <xs:element name="marginMarks" type="ima:MarginMarks" minOccurs="0" maxOccurs="1" />
+    <xs:element name="colorBar" type="ima:ColorBar" minOccurs="0" maxOccurs="unbounded" />
+    <xs:element name="colorControl" type="ima:ColorControl" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="PlateMarks">
+  <xs:sequence>
+    <xs:element name="markGroup" type="ima:GenericMarkGroup" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="PrintedSheetMarks">
+  <xs:sequence>
+    <xs:element name="markGroup" type="ima:GenericMarkGroup" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SheetMarks">
+  <xs:sequence>
+    <xs:element name="markGroup" type="ima:GenericMarkGroup" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="PageMarks">
+  <xs:sequence>
+    <xs:element name="markGroup" type="ima:GenericMarkGroup" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Marks">
+  <xs:sequence>
+    <xs:element name="calculatedMarks" type="ima:CalculatedMarks" minOccurs="0" maxOccurs="1" />
+    <xs:element name="plateMarks" type="ima:PlateMarks" minOccurs="0" maxOccurs="1" />
+    <xs:element name="printedSheetMarks" type="ima:PrintedSheetMarks" minOccurs="0" maxOccurs="1" />
+    <xs:element name="sheetMarks" type="ima:SheetMarks" minOccurs="0" maxOccurs="1" />
+    <xs:element name="pageMarks" type="ima:PageMarks" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+</xs:schema>

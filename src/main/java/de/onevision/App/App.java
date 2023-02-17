@@ -1,30 +1,24 @@
 package de.onevision.App;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.logging.log4j.*;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import de.onevision.OutXml.OutXml;
 import de.onevision.PdfParser.*;
 import de.onevision.Platform.Application;
+import de.onevision.Platform.ExportConfig;
 import de.onevision.Platform.Locations;
-import de.onevision.Platform.XmlWriter;
+import de.onevision.Platform.TarUtil;
 import de.onevision.Platform.Exceptions.*;
 import de.onevision.Platform.Exceptions.Error;
-import de.onevision.config.ImposeConfig;
 import de.onevision.imposeConfigParser.ImposeConfigParser;
 import de.onevision.marks.Circle;
 import de.onevision.marks.Image;
@@ -54,65 +48,41 @@ public class App {
         }
     }
 
-    public static void extractTar(Path pathFrom, Path pathTo) throws Error {
-        TarArchiveInputStream tarFile;
-        try {
-            tarFile = new TarArchiveInputStream(new FileInputStream(new File(pathFrom.toString())));
-        }
-        catch(FileNotFoundException e) {
-            throw new Error("cannot read " + pathFrom);
-        }
-
-        try {
-            Files.createDirectories(pathTo);
-        }
-        catch(IOException e) {
-            throw new Error("cannot create temporary directory");
-        }
-
-        logger.info("reading file: " + pathFrom);
-        TarArchiveEntry entry;
-        try {
-            while ((entry = tarFile.getNextTarEntry()) != null) {
-                String filename = entry.getName();
-                byte[] content = new byte[(int) entry.getSize()];
-                int offset = 0;
-                tarFile.read(content, offset, content.length - offset);
-                if(entry.isDirectory()) {
-                    Files.createDirectory(pathTo.resolve(filename));
-                }
-                else {
-                    FileOutputStream outputFile = new FileOutputStream(new File(pathTo.toString() + "/" + filename));
-                    IOUtils.write(content, outputFile);              
-                    outputFile.close();
-                }
-            }               
-        
-            tarFile.close();
-        }
-        catch(IOException e) {
-            throw new Error("cannot read " + pathFrom);
-        }
-    }
-
     public static void getPdfInfo(Path input, Path output) throws Error {
-        Application ovpdfInfoHandle = Application.init(Locations.ovpdfInfoPath());
-        ArrayList<String> args = new ArrayList<String>();
+        var ovpdfInfoHandle = Application.init(Locations.ovpdfInfoPath());
+        var args = new ArrayList<String>();
         args.add(input.toString());
         args.add(output.toString());
         ovpdfInfoHandle.execute(args, false);
     }
 
     private static void impl3() throws Error, ParserConfigurationException {
-        Path inputFile = Locations.resources().resolve("3CrossFold.ic");
-        String filename = Locations.removeFileExtension(inputFile, false);
-        extractTar(inputFile, appTempFolder);
-        ImposeConfigParser imposeConfigParser = new ImposeConfigParser(appTempFolder, filename);
-        ImposeConfig imposeConfig = imposeConfigParser.createImposeConfig();
+        var inputFile = Locations.resources().resolve("3CrossFold.ic");
+        var filename = Locations.removeFileExtension(inputFile, false);
+        TarUtil.extractTar(inputFile, appTempFolder);
+        var imposeConfigParser = new ImposeConfigParser(appTempFolder, filename);
+        var imposeConfig = imposeConfigParser.createImposeConfig();
 
-        XmlWriter xmlWriter = new XmlWriter();
-        xmlWriter.add("test", 0, false);
-        xmlWriter.write(null, 1);
+        cleanup();
+        try {
+            Files.createDirectories(appTempFolder);
+        }
+        catch(IOException e) {
+            throw new Error("cannot create temporary directory");
+        }
+
+        var exportConfig = new ExportConfig();
+        exportConfig.exportModel = true;
+        exportConfig.exportTarget = true;
+        var indices = (ArrayList<Integer>)IntStream.rangeClosed(0, imposeConfig.flats.size() - 1).boxed().collect(Collectors.toList());
+        exportConfig.exportDeviceParamsIndexList = indices;
+        exportConfig.exportMarksIndexList = indices;
+        exportConfig.tempFolder = appTempFolder;
+
+        var outputFile = Path.of("D:/3CrossFold.ic");
+        //imposeConfig.export(exportConfig, outputFile);
+
+        imposeConfig.exportAsString();
     }
 
     private static void cleanup() {

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ic:imposeConfigTarget ic:majorVersion="31" ic:minorVersion="1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://www.onevision.com/ImposeConfigTarget ../../xsd/partConf/ImposeConfigTarget.xsd"
+  xmlns:ic="https://www.onevision.com/ImposeConfigTarget"
+  xmlns:ipt="https://www.onevision.com/ImposePhysicalTypes"
+  xmlns:ict="https://www.onevision.com/ImposeCommonTypes">
+  <ic:output>
+    <ipt:collectPlates>true</ipt:collectPlates>
+    <ipt:collectForms>all</ipt:collectForms>
+    <ipt:ascending>true</ipt:ascending>
+    <ipt:namestyle></ipt:namestyle>
+    <ipt:title></ipt:title>
+    <ipt:tilingMode>false</ipt:tilingMode>
+    <ipt:layoutMode>false</ipt:layoutMode>
+  </ic:output>
+  <ic:pagePos>
+    <ipt:format>
+      <ict:name>DinA5</ict:name>
+      <ict:size>
+        <ict:width>595.28</ict:width>
+        <ict:height>841.89</ict:height>
+      </ict:size>
+    </ipt:format>
+    <ipt:useMediaBox>false</ipt:useMediaBox>
+    <ipt:rotationAroundSelf>up</ipt:rotationAroundSelf>
+    <ipt:alignment>bottomLeft</ipt:alignment>
+    <ipt:offset>
+      <ict:width>0</ict:width>
+      <ict:height>0</ict:height>
+    </ipt:offset>
+    <ipt:scale>
+      <ict:width>1</ict:width>
+      <ict:height>1</ict:height>
+    </ipt:scale>
+    <ipt:rotationAroundAngle>0</ipt:rotationAroundAngle>
+    <ipt:bleedCut>8.5</ipt:bleedCut>
+    <ipt:bleedBack>8.5</ipt:bleedBack>
+    <ipt:bleedTop>8.5</ipt:bleedTop>
+    <ipt:bleedBottom>8.5</ipt:bleedBottom>
+  </ic:pagePos>
+  <ic:stepAndRepeat>
+    <ipt:minimumCoverage>0.33</ipt:minimumCoverage>
+    <ipt:continuousPages>false</ipt:continuousPages>
+    <ipt:allowRotation>false</ipt:allowRotation>
+  </ic:stepAndRepeat>
+</ic:imposeConfigTarget>

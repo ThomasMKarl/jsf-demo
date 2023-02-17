@@ -39,6 +39,15 @@ public class TransMat {
         return TM;
     }
 
+    public String toString() {
+        return this.elements[i11] + " " +
+        this.elements[i21] + " " +
+        this.elements[i12] + " " +
+        this.elements[i22] + " " +
+        this.elements[i13] + " " +
+        this.elements[i23];
+    }
+
     public TransMat translate(Point shift) {
         this.elements[i13] += shift.x();
         this.elements[i23] += shift.y();

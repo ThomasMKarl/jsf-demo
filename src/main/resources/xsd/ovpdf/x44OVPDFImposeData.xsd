@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:imp="https://www.onevision.com/OVPDFImpose"
+  targetNamespace="https://www.onevision.com/OVPDFImpose"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:complexType name="page">
+    <xs:attribute name="name" type="xs:string" use="optional"/>
+    <xs:attribute name="index" type="xs:nonNegativeInteger" use="required" />
+    <xs:attribute name="matrix" type="xs:string" use="optional" default="1.0 0.0 0.0 1.0 0.0 0.0" />
+    <xs:attribute name="clip" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="contText" mixed="true">
+    <xs:attribute name="insets" type="xs:string" use="required" />
+    <xs:attribute name="cmyk" type="xs:string" use="optional" default="1.0 1.0 1.0 1.0" />
+    <xs:attribute name="colorant" type="xs:string" use="optional" default="All" />
+    <xs:attribute name="tint" type="xs:double" use="optional" default="1.0" />
+    <xs:attribute name="overprint" type="xs:boolean" use="optional" default="false" />
+    <xs:attribute name="size" type="xs:double" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="style" type="xs:string" use="optional" default="" />
+    <xs:attribute name="knockout" type="xs:double" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="container">
+    <xs:sequence>
+      <xs:element name="text" type="imp:contText" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="layout" type="xs:string" use="required" />
+    <xs:attribute name="matrix" type="xs:string" use="optional" default="1.0 0.0 0.0 1.0 0.0 0.0" />
+  </xs:complexType>
+
+  <xs:complexType name="text" mixed="true">
+    <xs:attribute name="cmyk" type="xs:string" use="optional" default="1.0 1.0 1.0 1.0" />
+    <xs:attribute name="colorant" type="xs:string" use="optional" default="All" />
+    <xs:attribute name="tint" type="xs:double" use="optional" default="1.0" />
+    <xs:attribute name="overprint" type="xs:boolean" use="optional" default="false" />
+    <xs:attribute name="matrix" type="xs:string" use="optional" default="1.0 0.0 0.0 1.0 0.0 0.0" />
+    <xs:attribute name="box" type="xs:string" use="optional" />
+    <xs:attribute name="size" type="xs:double" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="style" type="xs:string" use="optional" default="" />
+    <xs:attribute name="vAlign" type="xs:integer" use="optional" default="0" />
+    <xs:attribute name="hAlign" type="xs:integer" use="optional" default="0" />
+    <xs:attribute name="knockout" type="xs:double" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="line">
+    <xs:attribute name="points" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="circle">
+    <xs:attribute name="points" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="stroke">
+    <xs:attribute name="cmyk" type="xs:string" use="optional" default="1.0 1.0 1.0 1.0" />
+    <xs:attribute name="colorant" type="xs:string" use="optional" default="All" />
+    <xs:attribute name="tint" type="xs:double" use="optional" default="1.0" />
+    <xs:attribute name="overprint" type="xs:boolean" use="optional" default="false" />
+    <xs:attribute name="with" type="xs:double" use="required" />
+    <!-- TBI -->
+  </xs:complexType>
+
+  <xs:complexType name="rect">
+    <xs:attribute name="points" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="fill">
+    <xs:sequence>
+      <xs:element name="rect" type="imp:rect" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="cmyk" type="xs:string" use="optional" default="1.0 1.0 1.0 1.0" />
+    <xs:attribute name="colorant" type="xs:string" use="optional" default="All" />
+    <xs:attribute name="tint" type="xs:double" use="optional" default="1.0" />
+    <xs:attribute name="overprint" type="xs:boolean" use="optional" default="false" />
+  </xs:complexType>
+
+  <xs:complexType name="replaceColor">
+    <xs:attribute name="colorant" type="xs:string" use="required" />
+    <xs:attribute name="cmyk" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="mark">
+    <xs:sequence>
+      <xs:element name="replaceColor" type="imp:replaceColor" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="file" type="xs:string" use="required" />
+    <xs:attribute name="matrix" type="xs:string" use="optional" default="1.0 0.0 0.0 1.0 0.0 0.0" />
+    <xs:attribute name="clip" type="xs:string" use="optional" />
+    <xs:attribute name="knockout" type="xs:double" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="barcode">
+    <!-- TBI -->
+  </xs:complexType>
+
+  <xs:complexType name="sheet">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="width" type="xs:double" use="optional" />
+    <xs:attribute name="height" type="xs:double" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="PDFImpose">
+    <xs:sequence>
+      <xs:element name="sheet" type="imp:sheet" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="width" type="xs:double" use="required"/>
+    <xs:attribute name="height" type="xs:double" use="required"/>
+  </xs:complexType>
+
+  <xs:element name="PDFInfo" type="imp:PDFImpose" />
+
+</xs:schema>

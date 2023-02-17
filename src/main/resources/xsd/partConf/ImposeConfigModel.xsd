@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:ic="https://www.onevision.com/ImposeConfigModel"
+  xmlns:imo="https://www.onevision.com/ImposeModel"
+  targetNamespace="https://www.onevision.com/ImposeConfigModel"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+
+<xs:import schemaLocation="../types/ImposeModel.xsd"
+  namespace="https://www.onevision.com/ImposeModel" />
+
+<xs:complexType name="ImposeConfigModel">
+  <xs:sequence>
+    <xs:element name="model" type="imo:Model" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+  <xs:attribute name="majorVersion" type="xs:positiveInteger" use="required" fixed="31" />
+  <xs:attribute name="minorVersion" type="xs:positiveInteger" use="required" />
+</xs:complexType>
+
+<xs:element name="imposeConfigModel" type="ic:ImposeConfigModel" />
+
+</xs:schema>

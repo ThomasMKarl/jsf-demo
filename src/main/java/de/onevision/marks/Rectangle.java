@@ -22,6 +22,11 @@ public final class Rectangle implements Mark {
     }
 
     @Override
+    public final TransMat getTM() {
+        return TM;
+    }
+
+    @Override
     public Element generateXml(Document doc, Element elem) {
         Element fillElem = (Element)elem.appendChild(doc.createElement("fill"));
         spotColor.appendAttributes(fillElem);

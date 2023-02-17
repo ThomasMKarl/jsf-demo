@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:ic="https://www.onevision.com/ImposeConfigCompose"
+  targetNamespace="https://www.onevision.com/ImposeConfigCompose"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:ict="https://www.onevision.com/ImposeCommonTypes"
+  elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+
+<xs:import schemaLocation="../types/ImposeCommonTypes.xsd"
+  namespace="https://www.onevision.com/ImposeCommonTypes" />
+
+<xs:simpleType name="MoveOutside">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="up"></xs:enumeration>
+    <xs:enumeration value="right"></xs:enumeration>
+    <xs:enumeration value="down"></xs:enumeration>
+    <xs:enumeration value="left"></xs:enumeration>
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="Composite">
+  <xs:sequence>
+    <xs:element name="rotation" type="ict:Rotation" minOccurs="1" maxOccurs="1"/>
+    <xs:element name="referenceLayout" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+    <xs:element name="alignment" type="ict:Alignment" minOccurs="1" maxOccurs="1"/>
+    <xs:element name="moveOutside" type="ic:MoveOutside" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ImposeConfigCompose">
+  <xs:sequence>
+    <xs:element name="composite" type="ic:Composite" minOccurs="1" maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:attribute name="majorVersion" type="xs:positiveInteger" use="required" fixed="31" />
+  <xs:attribute name="minorVersion" type="xs:positiveInteger" use="required" />
+</xs:complexType>
+
+<xs:element name="imposeConfigCompose" type="ic:ImposeConfigCompose" />
+
+</xs:schema>

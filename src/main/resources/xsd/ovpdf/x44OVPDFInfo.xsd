@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:inf="https://www.onevision.com/OVPDFInfo"
+  targetNamespace="https://www.onevision.com/OVPDFInfo"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:simpleType name="PDFVersion">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="1.2" />
+      <xs:enumeration value="1.3" />
+      <xs:enumeration value="1.4" />
+      <xs:enumeration value="1.5" />
+      <xs:enumeration value="1.6" />
+      <xs:enumeration value="1.7" />
+      <xs:enumeration value="2.0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="PageSize">
+    <xs:sequence>
+      <xs:element name="Width" type="xs:double" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Height" type="xs:double" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Box">
+    <xs:sequence>
+      <xs:element name="X0" type="xs:double" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Y0" type="xs:double" minOccurs="1" maxOccurs="1" />
+      <xs:element name="X1" type="xs:double" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Y1" type="xs:double" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CustomColor">
+    <xs:sequence>
+      <xs:element name="Cyan" type="xs:double" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Magenta" type="xs:double" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Yellow" type="xs:double" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Black" type="xs:double" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="ColorInfo">
+    <xs:sequence>
+      <xs:element name="CustomColor" type="inf:CustomColor" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="Cyan" type="xs:boolean" default="false" />
+    <xs:attribute name="Magenta" type="xs:boolean" default="false" />
+    <xs:attribute name="Yellow" type="xs:boolean" default="false" />
+    <xs:attribute name="Black" type="xs:boolean" default="false" />
+  </xs:complexType>
+
+  <xs:complexType name="PageInfo">
+    <xs:sequence>
+      <xs:element name="PageSize" type="inf:PageSize" minOccurs="1" maxOccurs="1" />
+      <xs:element name="TrimBox" type="inf:Box" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="CropBox" type="inf:Box" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="BleedBox" type="inf:Box" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ArtBox" type="inf:Box" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="MediaBox" type="inf:Box" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ColorInfo" type="inf:ColorInfo" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="PageIndex" type="xs:nonNegativeInteger" use="required" />
+    <xs:attribute name="Rotation" type="xs:double" default="0" /> <!-- CW rotation -->
+  </xs:complexType>
+
+  <xs:complexType name="PDFInfo">
+    <xs:sequence>
+      <xs:element name="PageInfo" type="inf:PageInfo" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="FileName" type="xs:string" use="required" />
+    <xs:attribute name="FileFormat" type="xs:string" fixed="PDF" />
+    <xs:attribute name="PDFVersion" type="inf:PDFVersion" use="required" />
+    <xs:attribute name="PageCount" type="xs:positiveInteger" use="required" />
+    <xs:attribute name="PreSeparated" type="xs:boolean" use="required" />
+  </xs:complexType>
+
+  <xs:element name="PDFInfo" type="inf:PDFInfo" />
+
+</xs:schema>

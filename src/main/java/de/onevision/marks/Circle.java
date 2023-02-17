@@ -21,6 +21,11 @@ public final class Circle implements Mark {
     }
 
     @Override
+    public final TransMat getTM() {
+        return TM;
+    }
+
+    @Override
     public Element generateXml(Document doc, Element elem) {
         Element strokeElem = (Element) elem.appendChild(doc.createElement("stroke"));
         strokeElem = spotColor.appendAttributes(strokeElem);

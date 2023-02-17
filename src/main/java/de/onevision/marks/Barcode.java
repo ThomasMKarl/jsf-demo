@@ -22,6 +22,11 @@ public final class Barcode implements Mark {
   }
 
   @Override
+  public final TransMat getTM() {
+      return TM;
+  }
+
+  @Override
   public Element generateXml(Document doc, Element elem) {
       // TBI
       return elem;

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:ic="https://www.onevision.com/ImposeConfigDeviceParams"
+  xmlns:ipt="https://www.onevision.com/ImposePhysicalTypes"
+  targetNamespace="https://www.onevision.com/ImposeConfigDeviceParams"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+
+<xs:import schemaLocation="../types/ImposePhysicalTypes.xsd"
+  namespace="https://www.onevision.com/ImposePhysicalTypes" />
+
+<xs:complexType name="ImposeConfigDeviceParams">
+  <xs:sequence>
+    <xs:element name="deviceParameters" type="ipt:DeviceParameters" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+  <xs:attribute name="majorVersion" type="xs:positiveInteger" use="required" fixed="31" />
+  <xs:attribute name="minorVersion" type="xs:positiveInteger" use="required" />
+</xs:complexType>
+
+<xs:element name="imposeConfigDeviceParams" type="ic:ImposeConfigDeviceParams" />
+
+</xs:schema>

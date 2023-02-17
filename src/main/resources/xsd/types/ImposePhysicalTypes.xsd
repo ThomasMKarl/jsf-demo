@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:ipt="https://www.onevision.com/ImposePhysicalTypes"
+  xmlns:ict="https://www.onevision.com/ImposeCommonTypes" 
+  targetNamespace="https://www.onevision.com/ImposePhysicalTypes"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+
+<xs:import schemaLocation="../types/ImposeCommonTypes.xsd"
+  namespace="https://www.onevision.com/ImposeCommonTypes" />
+
+<xs:complexType name="Sheet">
+  <xs:sequence>
+    <xs:element name="format" type="ict:Format" minOccurs="1" maxOccurs="1" />
+    <xs:element name="volume" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="weight" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="turn" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="fibreHorizontal" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Plate">
+  <xs:sequence>
+    <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="offset" type="ict:Offset" minOccurs="1" maxOccurs="1" />
+    <xs:element name="rotation" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Printer">
+  <xs:sequence>
+    <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="digital" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="format" type="ict:Format" minOccurs="0" maxOccurs="1" />
+    <xs:element name="paperEdge" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="gripperMargin" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="plate" type="ipt:Plate" minOccurs="0" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Undercut" >
+  <xs:sequence>
+    <xs:element name="width" type="xs:double" minOccurs="1" maxOccurs="1" />
+	<xs:element name="height" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Excess" >
+  <xs:sequence>
+    <xs:element name="width" type="xs:double" minOccurs="1" maxOccurs="1" />
+	<xs:element name="height" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Reconcile" >
+  <xs:sequence>
+    <xs:element name="undercut" type="ipt:Undercut" minOccurs="0" maxOccurs="1" />
+    <xs:element name="excess" type="ipt:Excess" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="PagePos">
+  <xs:sequence>
+    <xs:element name="format" type="ict:Format" minOccurs="1" maxOccurs="1" />
+    <xs:element name="reconcile" type="ipt:Reconcile" minOccurs="0" maxOccurs="1" />
+    <xs:element name="useMediaBox" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="rotationAroundSelf" type="ict:Rotation" minOccurs="1" maxOccurs="1" />
+    <xs:element name="alignment" type="ict:Alignment" minOccurs="1" maxOccurs="1" />
+    <xs:element name="offset" type="ict:Offset" minOccurs="1" maxOccurs="1" />
+    <xs:element name="scale" type="ict:Scale" minOccurs="1" maxOccurs="1" />
+    <xs:element name="rotationAroundAngle" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="bleedCut" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="bleedBack" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="bleedTop" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="bleedBottom" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="Collect">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="all" />
+    <xs:enumeration value="frontBack" />
+    <xs:enumeration value="none" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="Output">
+  <xs:sequence>
+    <xs:element name="collectPlates" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="collectForms" type="ipt:Collect" minOccurs="1" maxOccurs="1" />
+    <xs:element name="ascending" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="namestyle" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="tilingMode" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="layoutMode" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="previewMode" type="xs:boolean" minOccurs="0" maxOccurs="1" default="false" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Gutter">
+  <xs:sequence>
+    <xs:element name="minSheetDistLeft" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="minSheetDistTop" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="minSheetDistRight" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="minSheetDistBottom" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="cut" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="back" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="topFromPage" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="bottomFromPage" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="StepAndRepeat">
+  <xs:sequence>
+    <xs:element name="minimumCoverage" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="continuousPages" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="allowRotation" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="DeviceParameters">
+  <xs:sequence>
+    <xs:element name="printer" type="ipt:Printer" minOccurs="1" maxOccurs="1" />
+    <xs:element name="sheet" type="ipt:Sheet" minOccurs="1" maxOccurs="1" />
+    <xs:element name="gutter" type="ipt:Gutter" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+</xs:schema>

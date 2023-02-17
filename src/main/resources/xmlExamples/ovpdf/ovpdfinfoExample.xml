@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PDFInfo FileName="test.pdf" FileFormat="PDF" PageCount="2" PDFVersion="1.7" PreSeparated="false" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://www.onevision.com/OVPDFInfo ../../xsd/ovpdf/x44OVPDFInfo.xsd"
+  xmlns="https://www.onevision.com/OVPDFInfo">
+  <PageInfo PageIndex="0">
+    <PageSize>
+      <Width>100</Width>
+      <Height>200</Height>
+    </PageSize>
+    <TrimBox>
+      <X0>20</X0>
+      <Y0>30</Y0>
+      <X1>80</X1>
+      <Y1>120</Y1>
+    </TrimBox>
+    <ArtBox>
+      <X0>25</X0>
+      <Y0>15</Y0>
+      <X1>84</X1>
+      <Y1>133</Y1>
+    </ArtBox>
+    <ColorInfo Cyan="true" Magenta="true" Yellow="true" Black="true">
+      <CustomColor Name="HKS13">
+        <Cyan>0</Cyan>
+        <Magenta>1</Magenta>
+        <Yellow>1</Yellow>
+        <Black>0</Black>
+      </CustomColor>
+      <CustomColor Name="HKS54">
+        <Cyan>1</Cyan>
+        <Magenta>0</Magenta>
+        <Yellow>1</Yellow>
+        <Black>0</Black>
+      </CustomColor>
+    </ColorInfo>
+  </PageInfo>
+  <PageInfo PageIndex="1" Rotation="-270">
+    <PageSize>
+      <Width>100</Width>
+      <Height>200</Height>
+    </PageSize>
+    <CropBox>
+      <X0>20</X0>
+      <Y0>30</Y0>
+      <X1>80</X1>
+      <Y1>120</Y1>
+    </CropBox>
+    <BleedBox>
+      <X0>25</X0>
+      <Y0>15</Y0>
+      <X1>84</X1>
+      <Y1>133</Y1>
+    </BleedBox>
+    <MediaBox>
+      <X0>25</X0>
+      <Y0>15</Y0>
+      <X1>84</X1>
+      <Y1>133</Y1>
+    </MediaBox>
+    <ColorInfo Cyan="false" Magenta="false" Yellow="false" Black="true" />
+  </PageInfo>
+</PDFInfo>

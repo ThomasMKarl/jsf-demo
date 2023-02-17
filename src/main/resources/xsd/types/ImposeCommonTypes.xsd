@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:ict="https://www.onevision.com/ImposeCommonTypes" 
+  targetNamespace="https://www.onevision.com/ImposeCommonTypes"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+
+<xs:complexType name="Size">
+  <xs:sequence>
+    <xs:element name="width" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="height" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Box">
+  <xs:sequence>
+    <xs:element name="width" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="height" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Scale">
+  <xs:sequence>
+    <xs:element name="width" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="height" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Offset">
+  <xs:sequence>
+    <xs:element name="width" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="height" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Margin">
+  <xs:sequence>
+    <xs:element name="x" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="y" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Space">
+  <xs:sequence>
+    <xs:element name="x" type="xs:double" minOccurs="1" maxOccurs="1" />
+    <xs:element name="y" type="xs:double" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Format">
+  <xs:sequence>
+    <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="size" type="ict:Size" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="Alignment">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="topLeft" />
+    <xs:enumeration value="topCenter" />
+    <xs:enumeration value="topRight" />
+    <xs:enumeration value="centerLeft" />
+    <xs:enumeration value="centerCenter" />
+    <xs:enumeration value="centerRight" />
+    <xs:enumeration value="bottomLeft" />
+    <xs:enumeration value="bottomCenter" />
+    <xs:enumeration value="bottomRight" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="Corner">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="lowerLeft" />
+    <xs:enumeration value="upperLeft" />
+    <xs:enumeration value="upperRight" />
+    <xs:enumeration value="lowerRight" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="Rotation">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="up" />
+    <xs:enumeration value="cw" />
+    <xs:enumeration value="down" />
+    <xs:enumeration value="ccw" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="Matrix">
+  <xs:attribute name="values" type="xs:string" use="required" />
+</xs:complexType>
+
+<xs:complexType name="Cmyk">
+  <xs:sequence>
+    <xs:element name="cyan" type="xs:double" />
+    <xs:element name="magenta" type="xs:double" />
+    <xs:element name="yellow" type="xs:double" />
+    <xs:element name="black" type="xs:double" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SpotColor">
+  <xs:sequence>
+    <xs:element name="name" type="xs:string" />
+    <xs:element name="cmyk" type="ict:Cmyk" />
+    <xs:element name="intensity" type="xs:double" />
+    <xs:element name="overprint" type="xs:boolean" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Shading">
+  <xs:sequence>
+    <xs:element name="begin" type="xs:double" />
+    <xs:element name="end" type="xs:double" />
+    <xs:element name="step" type="xs:double" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Font">
+  <xs:sequence>
+    <xs:element name="name" type="xs:string" />
+    <xs:element name="style" type="xs:string" />
+    <xs:element name="size" type="xs:double" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Segment">
+  <xs:sequence>
+    <xs:element name="text" type="xs:string" />
+    <xs:element name="font" type="ict:Font" />
+    <xs:element name="color" type="ict:SpotColor" />
+  </xs:sequence>
+</xs:complexType>
+
+</xs:schema>

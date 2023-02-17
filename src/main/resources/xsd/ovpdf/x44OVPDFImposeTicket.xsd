@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:imp="https://www.onevision.com/OVPDFImpose"
+  targetNamespace="https://www.onevision.com/OVPDFImpose"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:complexType name="File">
+    <xs:attribute name="Path" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="ImposeForms">
+    <xs:sequence>
+      <xs:element name="File" type="imp:File" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PDFImposeTicket">
+    <xs:sequence>
+      <xs:element name="PDFFile" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="OutputTicket" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="OutputFolder" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="MarkFileFolder" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="ResourceFolder" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="ImposeForms" type="imp:ImposeForms" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="PDFImposeTicket" type="imp:PDFImposeTicket" />
+
+</xs:schema>

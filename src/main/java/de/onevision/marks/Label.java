@@ -23,6 +23,11 @@ public final class Label implements Mark {
     }
 
     @Override
+    public final TransMat getTM() {
+        return TM;
+    }
+
+    @Override
     public Element generateXml(Document doc, Element elem) {
         Element containerElem = (Element)elem.appendChild(doc.createElement("container"));
         containerElem = TM.appendAttributes(containerElem);

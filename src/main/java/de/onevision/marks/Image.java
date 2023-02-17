@@ -27,10 +27,9 @@ public final class Image implements Mark {
         parse();
     }
 
-    public Optional<Double> knockoutThickness = Optional.empty();
-    public Box clip = new Box();
-
     private Path pathToFile = Locations.storageBasePath();
+    public Box clip = new Box();
+    public Optional<Double> knockoutThickness = Optional.empty();
     private Point size = new Point();
     private TransMat TM = TransMat.identity();
     private ArrayList<SpotColor> spotColors = new ArrayList<SpotColor>();
@@ -56,6 +55,11 @@ public final class Image implements Mark {
     @Override
     public void transform(TransMat TM) {
         TM = this.TM.mult(TM);
+    }
+
+    @Override
+    public final TransMat getTM() {
+        return TM;
     }
 
     @Override

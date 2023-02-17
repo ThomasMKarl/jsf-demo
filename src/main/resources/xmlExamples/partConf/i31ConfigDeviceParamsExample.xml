@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ic:imposeConfigDeviceParams ic:majorVersion="31" ic:minorVersion="1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://www.onevision.com/ImposeConfigDeviceParams ../../xsd/partConf/ImposeConfigDeviceParams.xsd"
+  xmlns:ic="https://www.onevision.com/ImposeConfigDeviceParams"
+  xmlns:ipt="https://www.onevision.com/ImposePhysicalTypes"
+  xmlns:ict="https://www.onevision.com/ImposeCommonTypes">
+  <ic:deviceParameters>
+    <ipt:printer>
+      <ipt:name>HD SM 102</ipt:name>
+      <ipt:digital>false</ipt:digital>
+      <ipt:format>
+        <ict:name>HD SM 102</ict:name>
+        <ict:size>
+          <ict:width>2919.69</ict:width>
+          <ict:height>2225.2</ict:height>
+        </ict:size>
+      </ipt:format>
+      <ipt:paperEdge>102.05</ipt:paperEdge>
+      <ipt:gripperMargin>28.35</ipt:gripperMargin>
+      <ipt:plate>
+        <ipt:name>Plate / HD Speedmaster 102</ipt:name>
+        <ipt:offset>
+          <ict:width>212.6</ict:width>
+          <ict:height>102.05</ict:height>
+        </ipt:offset>
+        <ipt:rotation>0</ipt:rotation>
+      </ipt:plate>
+    </ipt:printer>
+    <ipt:sheet>
+      <ipt:format>
+        <ict:name>A1 Plus</ict:name>
+        <ict:size>
+          <ict:width>2494.47</ict:width>
+          <ict:height>1785.82</ict:height>
+        </ict:size>
+      </ipt:format>
+      <ipt:volume>1</ipt:volume>
+      <ipt:weight>0</ipt:weight>
+      <ipt:turn>true</ipt:turn>
+      <ipt:fibreHorizontal>true</ipt:fibreHorizontal>
+    </ipt:sheet>
+    <ipt:gutter>
+      <ipt:minSheetDistLeft>9.92</ipt:minSheetDistLeft>
+      <ipt:minSheetDistTop>19.84</ipt:minSheetDistTop>
+      <ipt:minSheetDistRight>9.92</ipt:minSheetDistRight>
+      <ipt:minSheetDistBottom>19.84</ipt:minSheetDistBottom>
+      <ipt:cut>19.84</ipt:cut>
+      <ipt:back>8.5</ipt:back>
+      <ipt:topFromPage>11.34</ipt:topFromPage>
+      <ipt:bottomFromPage>19.84</ipt:bottomFromPage>
+    </ipt:gutter>
+  </ic:deviceParameters>
+  
+</ic:imposeConfigDeviceParams>

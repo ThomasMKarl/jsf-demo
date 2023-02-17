@@ -20,10 +20,10 @@ public class Locations {
     }
     public static Path userUniqueTempDir() {
         Integer index = 0;
-        Path dir = Paths.get(Platform.systemTempDir).resolve(Platform.userName).resolve(index.toString());
+        Path dir = Paths.get(Platform.systemTempDir).resolve(Platform.userName).resolve("Impose.app").resolve(index.toString());
         while (Files.exists(dir)) {
             ++index;
-            dir = Paths.get(Platform.systemTempDir).resolve(Platform.userName).resolve(index.toString());
+            dir = Paths.get(Platform.systemTempDir).resolve(Platform.userName).resolve("Impose.app").resolve(index.toString());
         }
         return dir;
     }

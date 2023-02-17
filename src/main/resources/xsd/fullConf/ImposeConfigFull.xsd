@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:ipt="https://www.onevision.com/ImposePhysicalTypes"
+  xmlns:ict="https://www.onevision.com/ImposeCommonTypes"
+  xmlns:imo="https://www.onevision.com/ImposeModel"
+  xmlns:ima="https://www.onevision.com/ImposeMarks"
+  xmlns:ic="https://www.onevision.com/ImposeConfig"
+  targetNamespace="https://www.onevision.com/ImposeConfig"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+
+<xs:import schemaLocation="../types/ImposeCommonTypes.xsd"
+  namespace="https://www.onevision.com/ImposeCommonTypes" />
+<xs:import schemaLocation="../types/ImposeModel.xsd"
+  namespace="https://www.onevision.com/ImposeModel" />
+<xs:import schemaLocation="../types/ImposeMarks.xsd"
+  namespace="https://www.onevision.com/ImposeMarks" />
+<xs:import schemaLocation="../types/ImposePhysicalTypes.xsd"
+  namespace="https://www.onevision.com/ImposePhysicalTypes" />
+
+<xs:complexType name="Flat">
+  <xs:sequence>
+    <xs:element name="referenceLayout" type="xs:positiveInteger" minOccurs="0" maxOccurs="1" />
+    <xs:element name="deviceParameters" type="ipt:DeviceParameters" minOccurs="1" maxOccurs="1" />
+    <xs:element name="marks" type="ima:Marks" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ImposeConfig">
+  <xs:sequence>
+    <xs:element name="output" type="ipt:Output" minOccurs="1" maxOccurs="1" />
+    <xs:element name="pagePos" type="ipt:PagePos" minOccurs="1" maxOccurs="unbounded" />
+    <xs:element name="stepAndRepeat" type="ipt:StepAndRepeat" minOccurs="0" maxOccurs="1" />
+    <xs:element name="model" type="imo:Model" minOccurs="1" maxOccurs="1" />
+    <xs:element name="flat" type="ic:Flat" minOccurs="1" maxOccurs="unbounded" />
+  </xs:sequence>
+  <xs:attribute name="majorVersion" type="xs:positiveInteger" use="required" fixed="31" />
+  <xs:attribute name="minorVersion" type="xs:positiveInteger" use="required" />
+</xs:complexType>
+
+<xs:element name="imposeConfig" type="ic:ImposeConfig" />
+
+</xs:schema>

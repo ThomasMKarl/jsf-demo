@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:ic="https://www.onevision.com/ImposeConfigTarget"
+  xmlns:ipt="https://www.onevision.com/ImposePhysicalTypes"
+  targetNamespace="https://www.onevision.com/ImposeConfigTarget"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+
+<xs:import schemaLocation="../types/ImposePhysicalTypes.xsd"
+  namespace="https://www.onevision.com/ImposePhysicalTypes" />
+
+<xs:complexType name="ImposeConfigTarget">
+  <xs:sequence>
+    <xs:element name="output" type="ipt:Output" minOccurs="1" maxOccurs="1" />
+    <xs:element name="pagePos" type="ipt:PagePos" minOccurs="1" maxOccurs="unbounded" />
+    <xs:element name="stepAndRepeat" type="ipt:StepAndRepeat" minOccurs="0" maxOccurs="1" />
+  </xs:sequence>
+  <xs:attribute name="majorVersion" type="xs:positiveInteger" use="required" fixed="31" />
+  <xs:attribute name="minorVersion" type="xs:positiveInteger" use="required" />
+</xs:complexType>
+
+<xs:element name="imposeConfigTarget" type="ic:ImposeConfigTarget" />
+
+</xs:schema>

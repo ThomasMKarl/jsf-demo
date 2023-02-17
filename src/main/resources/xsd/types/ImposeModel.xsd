@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:ict="https://www.onevision.com/ImposeCommonTypes"
+  xmlns:imo="https://www.onevision.com/ImposeModel" 
+  targetNamespace="https://www.onevision.com/ImposeModel"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+
+<xs:simpleType name="RemainderPackage">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="automatic" />
+    <xs:enumeration value="first" />
+    <xs:enumeration value="middle" />
+    <xs:enumeration value="last" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="RemainderSheet">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="automatic" />
+    <xs:enumeration value="first" />
+    <xs:enumeration value="beforeLast" />
+    <xs:enumeration value="last" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="Optimization">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="none" />
+    <xs:enumeration value="combineSame" />
+    <xs:enumeration value="combineSheets" />
+    <xs:enumeration value="combineCopies" />
+    <xs:enumeration value="workAndTT" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="AssemblingType">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="cutAndStack" />
+    <xs:enumeration value="gathering" />
+    <xs:enumeration value="insertAll" />
+    <xs:enumeration value="inserting" />
+    <!-- <xs:enumeration value="comeAndGo" /> -->
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="BindingType">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="threadStitching" />
+    <xs:enumeration value="saddleStitching" />
+    <xs:enumeration value="perfectBound" />
+    <xs:enumeration value="looseLeaf" />
+  </xs:restriction>
+</xs:simpleType>
+
+<xs:complexType name="Cell">
+  <xs:sequence>
+    <xs:element name="index" type="xs:nonNegativeInteger" minOccurs="1" maxOccurs="1" />
+    <xs:element name="rotated" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Row">
+  <xs:sequence>
+    <xs:element name="cell" type="imo:Cell" minOccurs="1" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Layout">
+  <xs:sequence>
+    <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+    <xs:element name="active" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="horizontal" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="row" type="imo:Row" minOccurs="1" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Model">
+  <xs:sequence>
+    <xs:element name="foldingProcess" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="singleSided" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="assemblingType" type="imo:AssemblingType" minOccurs="1" maxOccurs="1" />
+    <xs:element name="bindingType" type="imo:BindingType" minOccurs="1" maxOccurs="1" />
+    <xs:element name="reversePages" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="lays" type="xs:string" minOccurs="0" maxOccurs="1" />
+    <xs:element name="webs" type="xs:string" minOccurs="0" maxOccurs="1" />
+    <xs:element name="remainderPackage" type="imo:RemainderPackage" minOccurs="1" maxOccurs="1" />
+    <xs:element name="remainderSheet" type="imo:RemainderSheet" minOccurs="1" maxOccurs="1" />
+    <xs:element name="optimization" type="imo:Optimization" minOccurs="1" maxOccurs="1" />
+    <xs:element name="blankPagesFront" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+    <xs:element name="layout" type="imo:Layout" minOccurs="1" maxOccurs="unbounded" />
+  </xs:sequence>
+</xs:complexType>
+
+</xs:schema>

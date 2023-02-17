@@ -29,6 +29,11 @@ public final class Group implements Mark {
     }
 
     @Override
+    public final TransMat getTM() {
+        return TM;
+    }
+
+    @Override
     public Element generateXml(Document doc, Element elem) {
         return elem;
     }

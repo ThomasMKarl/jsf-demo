@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0"
+  xmlns:ic="https://www.onevision.com/ImposeConfigMarks"
+  xmlns:ima="https://www.onevision.com/ImposeMarks"
+  targetNamespace="https://www.onevision.com/ImposeConfigMarks"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="qualified">
+
+<xs:import schemaLocation="../types/ImposeMarks.xsd"
+  namespace="https://www.onevision.com/ImposeMarks" />
+
+<xs:complexType name="ImposeConfigMarks">
+  <xs:sequence>
+    <xs:element name="marks" type="ima:Marks" minOccurs="1" maxOccurs="1" />
+  </xs:sequence>
+  <xs:attribute name="majorVersion" type="xs:positiveInteger" use="required" fixed="31" />
+  <xs:attribute name="minorVersion" type="xs:positiveInteger" use="required" />
+</xs:complexType>
+
+<xs:element name="imposeConfigMarks" type="ic:ImposeConfigMarks" />
+
+</xs:schema>
